@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2,
+      "y": 5.5
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "SystemAutoShootShort"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AutoStraight2M"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AutoBack2M"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SystemShootNote"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

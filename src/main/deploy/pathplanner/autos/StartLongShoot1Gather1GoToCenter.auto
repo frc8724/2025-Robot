@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6727105761903848,
+      "y": 4.558527578593619
+    },
+    "rotation": -57.994616791916464
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "SystemAutoShootShort"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StartLong1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StartLong2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PivotShortShot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SystemShootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PivotZero"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StartLongToCenter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -1,0 +1,86 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.68,
+        "y": 7.73
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.567470528150756,
+        "y": 7.671445817271092
+      },
+      "isLocked": true,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.581343028591905,
+        "y": 5.972526638348569
+      },
+      "prevControl": {
+        "x": 5.580831421472659,
+        "y": 6.004510266920752
+      },
+      "nextControl": {
+        "x": 3.1174884603692163,
+        "y": 5.925683292165444
+      },
+      "isLocked": false,
+      "linkedName": "ShootShortCenter"
+    },
+    {
+      "anchor": {
+        "x": 1.08,
+        "y": 5.562647359246215
+      },
+      "prevControl": {
+        "x": 1.8997585582047058,
+        "y": 5.562647359246215
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SystemShootNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Graveyard",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

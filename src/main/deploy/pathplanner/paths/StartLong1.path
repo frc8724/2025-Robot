@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.6727105761903848,
+        "y": 4.578261464215237
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5607354291631679,
+        "y": 4.4795920361071495
+      },
+      "isLocked": false,
+      "linkedName": "StartLong"
+    },
+    {
+      "anchor": {
+        "x": 2.8533049373791073,
+        "y": 4.114515152107228
+      },
+      "prevControl": {
+        "x": 2.2415544831089678,
+        "y": 4.055313495242375
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "LongSideNote"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SystemIntakeNote2sec"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "StartLong",
+  "previewStartingState": {
+    "rotation": -57.52880770915156,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
