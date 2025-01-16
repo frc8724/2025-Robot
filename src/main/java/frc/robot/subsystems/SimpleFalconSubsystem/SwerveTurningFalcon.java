@@ -6,15 +6,18 @@ package frc.robot.subsystems.SimpleFalconSubsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.motors.MayhemTalonFX;
-import frc.robot.motors.MayhemTalonFX.CurrentLimit;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.*;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class SwerveTurningFalcon extends SubsystemBase {
-  private MayhemTalonFX motor;
+  private TalonFX motor;
+  StatusSignal<Double> rotorPosSignal;
+  PositionVoltage posVolt = new PositionVoltage(0);
+
   private String name;
 
   final double MOTOR_TICKS_PER_ROTATION = 2048.0;
@@ -24,38 +27,32 @@ public class SwerveTurningFalcon extends SubsystemBase {
 
   /** Creates a new SimpleFalconSubsystem. */
   public SwerveTurningFalcon(String name, int id, boolean invert) {
-    motor = new MayhemTalonFX(id, CurrentLimit.HIGH_CURRENT, "canivore");
+    motor = new TalonFX(id);
+    rotorPosSignal = motor.getRotorPosition();
+
     motor.setInverted(invert);
     this.name = name;
-    motor.setSelectedSensorPosition(0);
+    motor.setPosition(0);
 
-    motor.config_kP(0, 1.0);
-    motor.config_kI(0, 0.0);
-    motor.config_kD(0, 10.0);
-    motor.config_kF(0, 0.0);
+    var talonFXConfigs = new TalonFXConfiguration();
 
-    motor.configAllowableClosedloopError(0, 10);
+    talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    motor.configNominalOutputForward(0.0);
-    motor.configNominalOutputReverse(0.0);
-    motor.configPeakOutputForward(+12.0);
-    motor.configPeakOutputReverse(-12.0);
-    motor.configNeutralDeadband(0.0);
-    motor.setNeutralMode(NeutralMode.Brake);
+    // set slot 0 gains and leave every other config factory-default
+    var slot0Configs = talonFXConfigs.Slot0;
+    slot0Configs.kP = 1.0;
+    slot0Configs.kI = 0.0;
+    slot0Configs.kD = 10.0;
+    slot0Configs.kV = 0.0;
+
+    // apply all configs, 50 ms total timeout
+    motor.getConfigurator().apply(talonFXConfigs, 0.050);
   }
 
   double m_set;
 
   double convertRadiansToTicks(double rads) {
     return rads * MOTOR_TICKS_PER_WHEEL_ROTATION / (2 * Math.PI);
-
-    // double currentTicks = motor.getSelectedSensorPosition() %
-    // MOTOR_TICKS_PER_WHEEL_ROTATION;
-    // double desiredTicks = rads * MOTOR_TICKS_PER_WHEEL_ROTATION / (2 * Math.PI);
-
-    // if( currentTicks - desiredTicks > MOTOR_TICKS_PER_WHEEL_ROTATION / 2){
-
-    // }
   }
 
   final double twoPi = Math.PI * 2.0;
@@ -100,31 +97,6 @@ public class SwerveTurningFalcon extends SubsystemBase {
     }
   }
 
-  private double placeInAppropriate0To2PiScope(double scopeReference, double newAngle) {
-    double lowerBound;
-    double upperBound;
-    double startingRadianNeg2Pito2Pi = scopeReference % twoPi;
-    if (startingRadianNeg2Pito2Pi >= 0) {
-      lowerBound = scopeReference - startingRadianNeg2Pito2Pi;
-      upperBound = scopeReference + (twoPi - startingRadianNeg2Pito2Pi);
-    } else {
-      upperBound = scopeReference - startingRadianNeg2Pito2Pi;
-      lowerBound = scopeReference - (twoPi + startingRadianNeg2Pito2Pi);
-    }
-    while (newAngle < lowerBound) {
-      newAngle += twoPi;
-    }
-    while (newAngle > upperBound) {
-      newAngle -= twoPi;
-    }
-    if (newAngle - scopeReference > Math.PI) {
-      newAngle -= twoPi;
-    } else if (newAngle - scopeReference < -Math.PI) {
-      newAngle += twoPi;
-    }
-    return newAngle;
-  }
-
   /**
    * value is from -pi to +pi. In order to ensure
    * smoother rotation we check if we are crossing pi
@@ -137,7 +109,9 @@ public class SwerveTurningFalcon extends SubsystemBase {
     double rotation = this.shortestRotation(currentRotation, value);
     double finalRotation = currentRotation + rotation;
     double e = convertRadiansToTicks(finalRotation);
-    double s = motor.getSelectedSensorPosition() % MOTOR_TICKS_PER_WHEEL_ROTATION;
+
+    double position = rotorPosSignal.getValue();
+    double s = position % MOTOR_TICKS_PER_WHEEL_ROTATION;
 
     if (this.name == "frontLeftTurningMotor") {
       // SmartDashboard.putNumber(this.name + " desired radians", value);
@@ -152,27 +126,27 @@ public class SwerveTurningFalcon extends SubsystemBase {
     }
     double ticks;
     if (e - s + MOTOR_TICKS_PER_WHEEL_ROTATION < s - e) {
-      ticks = motor.getSelectedSensorPosition() + e - s + MOTOR_TICKS_PER_WHEEL_ROTATION;
+      ticks = position + e - s + MOTOR_TICKS_PER_WHEEL_ROTATION;
     } else {
-      ticks = motor.getSelectedSensorPosition() - (s - e);
+      ticks = position - (s - e);
     }
-    motor.set(TalonFXControlMode.Position, ticks);
+    motor.setControl(posVolt.withPosition(ticks));
     m_set = e;
   }
 
   public void setMotorPositionTick(double ticks) {
-    motor.setSelectedSensorPosition(ticks, 0, 100);
-    motor.set(TalonFXControlMode.Position, ticks);
+    motor.setPosition(ticks);
+    motor.setControl(posVolt.withPosition(ticks));
     m_set = ticks;
   }
 
   public double getRotationRadians() {
-    double limitedSensorPosition = motor.getSelectedSensorPosition() % (MOTOR_TICKS_PER_WHEEL_ROTATION);
+    double limitedSensorPosition = rotorPosSignal.getValue() % (MOTOR_TICKS_PER_WHEEL_ROTATION);
     return limitedSensorPosition / MOTOR_TICKS_PER_WHEEL_ROTATION * 2 * Math.PI;
   }
 
   public double getRotationTicks() {
-    return motor.getSelectedSensorPosition();
+    return rotorPosSignal.getValue();
   }
 
   public void reset() {
@@ -181,7 +155,7 @@ public class SwerveTurningFalcon extends SubsystemBase {
 
   public void reset(double tick) {
     set(0.0);
-    motor.setSelectedSensorPosition(0.0);
+    motor.setPosition(0.0);
   }
 
   @Override
