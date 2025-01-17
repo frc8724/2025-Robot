@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.SimpleFalconSubsystem;
 
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -16,8 +18,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class SwerveDriveFalcon extends SubsystemBase {
   private TalonFX motor;
-  StatusSignal<Double> rotorVelSignal;
-  StatusSignal<Double> rotorPosSignal;
+  StatusSignal<AngularVelocity> rotorVelSignal;
+  StatusSignal<Angle> rotorPosSignal;
   VelocityVoltage velVolt = new VelocityVoltage(0);
 
   private String name;
@@ -69,14 +71,14 @@ public class SwerveDriveFalcon extends SubsystemBase {
    * get meters per second of the drive wheel
    */
   public double getRotationalVelocity() {
-    var ticksPerSecond = rotorVelSignal.getValue() / 0.100;
-    var metersPerSecond = ticksPerSecond / Drive1rotationTicks * Math.PI * WheelDiameterMeters;
+    var ticksPerSecond = rotorVelSignal.getValue().div( 0.100);
+    var metersPerSecond = ticksPerSecond.baseUnitMagnitude() / Drive1rotationTicks * Math.PI * WheelDiameterMeters;
     return metersPerSecond;
   }
 
   // distance in meters
   public double getDistance() {
-    return rotorPosSignal.getValue() / Drive1rotationTicks * WheelDiameterMeters * Math.PI;
+    return rotorPosSignal.getValue().baseUnitMagnitude() / Drive1rotationTicks * WheelDiameterMeters * Math.PI;
   }
 
   public void reset() {

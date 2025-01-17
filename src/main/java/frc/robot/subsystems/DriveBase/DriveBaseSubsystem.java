@@ -1,11 +1,7 @@
 package frc.robot.subsystems.DriveBase;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -58,7 +54,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
             DriveConstants.kRearRightTurningEncoderReversed,
             DriveConstants.RearRightMag);
 
-    private final WPI_Pigeon2 m_gyro = new WPI_Pigeon2(22, "canivore");
+    private final Pigeon2 m_gyro = new Pigeon2(22, "rio");
 
     SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
             DriveConstants.kDriveKinematics,
@@ -71,9 +67,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
             });
 
     public DriveBaseSubsystem() {
-        m_gyro.configFactoryDefault();
         m_gyro.setYaw(0);
-        AutoBuilder.configureHolonomic(
+        AutoBuilder.configure(
                 this::getPose, // Robot pose supplier
                 this::resetPose, // Method to reset odometry (will be called if your auto has
                 // a starting pose)
