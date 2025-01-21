@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.SimpleFalconSubsystem;
 
+import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,7 +17,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class SwerveTurningFalcon extends SubsystemBase {
   private TalonFX motor;
-  StatusSignal<Double> rotorPosSignal;
+  StatusSignal<Angle> rotorPosSignal;
   PositionVoltage posVolt = new PositionVoltage(0);
 
   private String name;
@@ -110,7 +112,7 @@ public class SwerveTurningFalcon extends SubsystemBase {
     double finalRotation = currentRotation + rotation;
     double e = convertRadiansToTicks(finalRotation);
 
-    double position = rotorPosSignal.getValue();
+    double position = rotorPosSignal.getValue().magnitude();
     double s = position % MOTOR_TICKS_PER_WHEEL_ROTATION;
 
     if (this.name == "frontLeftTurningMotor") {
@@ -141,12 +143,12 @@ public class SwerveTurningFalcon extends SubsystemBase {
   }
 
   public double getRotationRadians() {
-    double limitedSensorPosition = rotorPosSignal.getValue() % (MOTOR_TICKS_PER_WHEEL_ROTATION);
+    double limitedSensorPosition = rotorPosSignal.getValue().magnitude() % (MOTOR_TICKS_PER_WHEEL_ROTATION);
     return limitedSensorPosition / MOTOR_TICKS_PER_WHEEL_ROTATION * 2 * Math.PI;
   }
 
   public double getRotationTicks() {
-    return rotorPosSignal.getValue();
+    return rotorPosSignal.getValue().magnitude() / 360 * MOTOR_TICKS_PER_WHEEL_ROTATION;
   }
 
   public void reset() {

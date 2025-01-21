@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.SimpleFalconSubsystem;
 
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -25,8 +27,8 @@ public class SwerveDriveKraken extends SubsystemBase {
   final double WheelDiameterMeters = 0.102;
   final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
 
-  StatusSignal<Double> velocitySupplier;
-  StatusSignal<Double> motorPosition;
+  StatusSignal<AngularVelocity> velocitySupplier;
+  StatusSignal<Angle> motorPosition;
   int motorID;
 
   /** Creates a new SimpleFalconSubsystem. */
