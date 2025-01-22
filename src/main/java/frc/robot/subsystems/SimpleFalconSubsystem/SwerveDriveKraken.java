@@ -33,7 +33,7 @@ public class SwerveDriveKraken extends SubsystemBase {
 
   /** Creates a new SimpleFalconSubsystem. */
   public SwerveDriveKraken(String name, int id, boolean invert) {
-    motor = new TalonFX(id);
+    motor = new TalonFX(id, "canivore");
     motor.setInverted(invert);
     this.motorID = id;
     this.name = name;

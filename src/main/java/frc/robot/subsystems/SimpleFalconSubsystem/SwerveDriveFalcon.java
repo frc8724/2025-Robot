@@ -30,7 +30,7 @@ public class SwerveDriveFalcon extends SubsystemBase {
 
   /** Creates a new SimpleFalconSubsystem. */
   public SwerveDriveFalcon(String name, int id, boolean invert) {
-    motor = new TalonFX(id);
+    motor = new TalonFX(id, "canivore");
     rotorVelSignal = motor.getRotorVelocity();
     rotorPosSignal = motor.getRotorPosition();
 
@@ -71,6 +71,7 @@ public class SwerveDriveFalcon extends SubsystemBase {
    * get meters per second of the drive wheel
    */
   public double getRotationalVelocity() {
+    rotorVelSignal.refresh();
     var ticksPerSecond = rotorVelSignal.getValue().div( 0.100);
     var metersPerSecond = ticksPerSecond.baseUnitMagnitude() / Drive1rotationTicks * Math.PI * WheelDiameterMeters;
     return metersPerSecond;
@@ -78,6 +79,7 @@ public class SwerveDriveFalcon extends SubsystemBase {
 
   // distance in meters
   public double getDistance() {
+    rotorPosSignal.refresh();
     return rotorPosSignal.getValue().baseUnitMagnitude() / Drive1rotationTicks * WheelDiameterMeters * Math.PI;
   }
 
@@ -95,5 +97,7 @@ public class SwerveDriveFalcon extends SubsystemBase {
     // motor.getSelectedSensorPosition());
     // SmartDashboard.putNumber(this.name + " m_set", m_set);
 
+    rotorPosSignal.refresh();
+    rotorVelSignal.refresh();
   }
 }
