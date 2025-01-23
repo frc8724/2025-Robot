@@ -41,7 +41,7 @@ public class SwerveDriveFalcon extends SubsystemBase {
 
     var talonFXConfigs = new TalonFXConfiguration();
 
-    talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
     // set slot 0 gains and leave every other config factory-default
     var slot0Configs = talonFXConfigs.Slot0;
@@ -49,6 +49,11 @@ public class SwerveDriveFalcon extends SubsystemBase {
     slot0Configs.kI = 0.0;
     slot0Configs.kD = 0.0;
     slot0Configs.kV = 0.0;
+
+    talonFXConfigs.HardwareLimitSwitch.ForwardLimitEnable = false;
+    talonFXConfigs.HardwareLimitSwitch.ReverseLimitEnable = false;
+
+    motor.getConfigurator().apply(talonFXConfigs);
   }
 
   double m_set;
@@ -62,8 +67,7 @@ public class SwerveDriveFalcon extends SubsystemBase {
    * @param value meters per second
    */
   public void set(double value) {
-    double ticksPer100ms = convertMpsToTicksPer100ms(value);
-    motor.setControl(velVolt.withVelocity(ticksPer100ms));
+    motor.setControl(velVolt.withVelocity(value / WheelCircumferenceMeters * 10));
     m_set = value;
   }
 

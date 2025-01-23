@@ -132,9 +132,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
                 m_rearRightSwerveModule.getState());
     }
 
-    public void driveRobotRelative(ChassisSpeeds speeds) {
-        this.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
-    }
+    // public void driveRobotRelative(ChassisSpeeds speeds) {
+    //     this.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
+    // }
 
     public void resetPose(Pose2d pose) {
         m_odometry.resetPosition(
@@ -196,6 +196,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
      */
     public void drive(double forwardSpeed, double sideSpeed, double rot, boolean fieldRelative) {
         ChassisSpeeds roboChassisSpeeds = null;
+
+        // forwardSpeed = 2;
+        // sideSpeed = 0.0;
+        // rot = 0;
 
         if (fieldRelative) {
             var imu = m_gyro.getRotation2d();
