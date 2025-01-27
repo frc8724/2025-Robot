@@ -4,12 +4,10 @@
 
 package frc.robot.subsystems.SimpleFalconSubsystem;
 
-import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -37,7 +35,6 @@ public class SwerveTurningFalcon extends SubsystemBase {
     rotorPosSignal = motor.getRotorPosition();
 
     this.name = name;
-    motor.setPosition(0);
 
     var talonFXConfigs = new TalonFXConfiguration();
 
@@ -46,18 +43,18 @@ public class SwerveTurningFalcon extends SubsystemBase {
 
     // set slot 0 gains and leave every other config factory-default
     var slot0Configs = talonFXConfigs.Slot0;
-    slot0Configs.kP = 1.0;
+    slot0Configs.kP = 4.1;
     slot0Configs.kI = 0.0;
-    slot0Configs.kD = 10.0;
+    slot0Configs.kD = 0.0;
     slot0Configs.kV = 0.0;
 
     talonFXConfigs.HardwareLimitSwitch.ForwardLimitEnable = false;
     talonFXConfigs.HardwareLimitSwitch.ReverseLimitEnable = false;
 
     motor.getConfigurator().apply(talonFXConfigs);
-  }
 
-  // double m_set;
+    motor.setPosition(0, 1.0);
+  }
 
   double convertRadiansToTicks(double rads) {
     return rads * MOTOR_TICKS_PER_WHEEL_ROTATION / (2 * Math.PI);
@@ -66,43 +63,74 @@ public class SwerveTurningFalcon extends SubsystemBase {
   final double twoPi = Math.PI * 2.0;
 
   /**
-   * Give a source radian and a target radian, return the radian difference to
-   * add to the source to get to the target, possibly passing through pi/-pi.
-   * 
-   * @param source
-   * @param target
+   * Given a starting radian and an ending radian, return a 
+   * equivalent radian to the ending that is the shortest 
+   * distance from the starting.
+   * e.g. staring rad = pi (180 deg)
+   *      ending rad = -pi/2 (-90 deg)
+   *      shortest rad = 3pi/2 (270 deg)
+   * @param starting
+   * @param ending
    * @return
    */
-  public double shortestRotation(double source, double target) {
-    // double sourceMod = source < 0 ? twoPi + (source % twoPi) : (source % twoPi);
-    // double targetMod = target < 0 ? twoPi + (target % twoPi) : (target % twoPi);
+  public double shortestRotation(double starting, double ending) {
+    // convert radians to rotations to get whole numbers
+    var startingRot = starting * 2 * Math.PI;
+    var endingRot = ending * 2 * Math.PI;
 
-    double sourceMod = source % twoPi;
-    double targetMod = target % twoPi;
+    long startingInt = (long)startingRot;
+    long endingint = (long)endingRot;
 
-    if (sourceMod < 0.0) {
-      sourceMod += twoPi;
+    var startingFrac = startingRot - startingInt;
+    var endingFrac = endingRot - endingint;
+
+    // example
+    // starting = .5
+    // ending = -.25
+    // opt1: starting - end = .75
+    // opt2: end - start = .25
+
+
+
+    var opt1 = startingFrac - endingFrac;  // 0 - .25 = -.25
+    var opt2 = endingFrac - startingFrac;  // .25 - 0 
+
+    if( opt1 < 0) opt1 += 1.0; // .75
+    if( opt2 < 0) opt2 += 1.0; // .25
+
+    if( Math.abs(opt1) < Math.abs(opt2)){
+      return starting - opt1;
     }
-    if (targetMod < 0.0) {
-      targetMod += twoPi;
+    else{
+      return starting + opt2;
     }
 
-    if (sourceMod > twoPi) {
-      sourceMod -= twoPi;
-    }
-    if (targetMod > twoPi) {
-      targetMod -= twoPi;
-    }
+    // double sourceMod = starting % twoPi;
+    // double targetMod = ending % twoPi;
 
-    double rotation = targetMod - sourceMod;
+    // if (sourceMod < 0.0) {
+    //   sourceMod += twoPi;
+    // }
+    // if (targetMod < 0.0) {
+    //   targetMod += twoPi;
+    // }
 
-    if (rotation > Math.PI) {
-      return rotation - twoPi;
-    } else if (rotation < -Math.PI) {
-      return twoPi + rotation;
-    } else {
-      return rotation;
-    }
+    // if (sourceMod > twoPi) {
+    //   sourceMod -= twoPi;
+    // }
+    // if (targetMod > twoPi) {
+    //   targetMod -= twoPi;
+    // }
+
+    // double rotation = targetMod - sourceMod;
+
+    // if (rotation > Math.PI) {
+    //   return rotation - twoPi;
+    // } else if (rotation < -Math.PI) {
+    //   return twoPi + rotation;
+    // } else {
+    //   return rotation;
+    // }
   }
 
   /**
@@ -113,52 +141,26 @@ public class SwerveTurningFalcon extends SubsystemBase {
    * @param value radians
    */
   public void set(double value) {
-    double currentRotation = this.getRotationRadians();
+    double currentRotation = this.getRotationRadians() / (150.0/7.0); // convert motor radians to wheel radians
     double rotation = this.shortestRotation(currentRotation, value);
-    double finalRotation = currentRotation + rotation;
-    // double e = convertRadiansToTicks(finalRotation);
-
-    // double position = rotorPosSignal.getValue().magnitude();
-    // double s = position % MOTOR_TICKS_PER_WHEEL_ROTATION;
+    // double finalRotation = currentRotation + rotation;
 
     if (this.name == "frontLeftTurningMotor") {
-      // SmartDashboard.putNumber(this.name + " desired radians", value);
-      // SmartDashboard.putNumber(this.name + " current radians", currentRotation);
-      // SmartDashboard.putNumber(this.name + " rotation mod", rotation);
-      // SmartDashboard.putNumber(this.name + " shortest radians", finalRotation);
-      // System.out.println("rotation: " + rotation);
-      // System.out.println("final rot: " + finalRotation);
-      // System.out.println("final Tick: " + e);
-      // System.out.println("motor curr ticks: " + motor.getSelectedSensorPosition());
-      // System.out.println("==============================");
-    // }
-    // double ticks;
-    // if (e - s + MOTOR_TICKS_PER_WHEEL_ROTATION < s - e) {
-      // ticks = position + e - s + MOTOR_TICKS_PER_WHEEL_ROTATION;
-    // } else {
-      // ticks = position - (s - e);
-      System.out.println("" + name + " :" + finalRotation + " " + currentRotation);
+      System.out.println("" + name + " :" + value + " " + currentRotation + " " + rotation);
+      // motor.setControl(posVolt.withPosition(value * 3.5));
+      // SmartDashboard.putNumber(this.name + " target", value * 3.5);
     }
-    motor.setControl(posVolt.withPosition(finalRotation));
-    // m_set = e;
+
+    motor.setControl(posVolt.withPosition(rotation * 3.5));
   }
 
   public void setMotorPositionTick(double ticks) {
     motor.setPosition(ticks);
-    // motor.setControl(posVolt.withPosition(ticks));
-    // m_set = ticks;
   }
 
   public double getRotationRadians() {
     return rotorPosSignal.getValue().in(Radians);
-    // double limitedSensorPosition = rotorPosSignal.getValue().magnitude() % (MOTOR_TICKS_PER_WHEEL_ROTATION);
-    // return limitedSensorPosition / MOTOR_TICKS_PER_WHEEL_ROTATION * 2 * Math.PI;
   }
-
-  // public double getRotationTicks() {
-  //   return rotorPosSignal.getValue().in(Degrees) / 360 * MOTOR_TICKS_PER_WHEEL_ROTATION;
-  //   // return rotorPosSignal.getValue().magnitude() / 360 * MOTOR_TICKS_PER_WHEEL_ROTATION;
-  // }
 
   public void reset() {
     this.reset(0);
@@ -171,22 +173,9 @@ public class SwerveTurningFalcon extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // // This method will be called once per scheduler run
-    // SmartDashboard.putNumber(this.name + " position",
-    // motor.getSelectedSensorPosition());
-    // SmartDashboard.putNumber(this.name + " error", motor.getClosedLoopError());
-    // SmartDashboard.putNumber(this.name + " MOTOR_TICKS_PER_WHEEL_ROTATION",
-    // MOTOR_TICKS_PER_WHEEL_ROTATION);
-    // SmartDashboard.putNumber(this.name + " rads", this.getRotationRadians());
-    // SmartDashboard.putNumber(this.name + " m_set", m_set);
-    // SmartDashboard.putNumber("test shortestRotation 3/4*PI to -3/4*PI",
-    // shortestRotation(Math.PI * 3.0 / 4.0, -Math.PI * 3.0 / 4.0)); // should be
-    // +Pi/2 = 1.57
-
-    // SmartDashboard.putNumber("test shortestRotation -3/4*PI to 3/4*PI",
-    // shortestRotation(-Math.PI * 3.0 / 4.0, Math.PI * 3.0 / 4.0)); // should be
-    // -Pi/2 = 1.57
-
+    // This method will be called once per scheduler run
     rotorPosSignal.refresh();
+
+    SmartDashboard.putNumber(this.name + " rads", this.getRotationRadians() / (150.0/7.0));
   }
 }
