@@ -68,8 +68,8 @@ public class RobotContainer {
          * by angular velocity.
          */
         SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                        m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y),
-                        m_driverStick.Axis(MayhemExtreme3dPro.Axis.X))
+                        () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
+                        () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
                         .withControllerRotationAxis(m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z))
                         .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.8).allianceRelativeControl(true);
 
@@ -100,19 +100,10 @@ public class RobotContainer {
         // Derive the heading axis with math!
         SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
                         .withControllerHeadingAxis(() -> Math.sin(
-                                        m_driverStick.getRawAxis(
-                                                        MayhemExtreme3dPro.Axis.X) *
-                                                        Math.PI)
-                                        *
-                                        (Math.PI *
-                                                        2),
-                                        () -> Math.cos(
-                                                        m_driverStick.getRawAxis(
-                                                                        MayhemExtreme3dPro.Axis.X) *
-                                                                        Math.PI)
-                                                        *
-                                                        (Math.PI *
-                                                                        2))
+                                        m_driverStick.getRawAxis(MayhemExtreme3dPro.Axis.X) * Math.PI)
+                                        * (Math.PI * 2),
+                                        () -> Math.cos(m_driverStick.getRawAxis(MayhemExtreme3dPro.Axis.X) * Math.PI)
+                                                        * (Math.PI * 2))
                         .headingWhile(true);
 
         // public static final Targeting m_targets = new Targeting();
@@ -164,8 +155,7 @@ public class RobotContainer {
                 Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
                 Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
                 Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
-                Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
-                                driveDirectAngle);
+                Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
                 Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
                 Command driveFieldOrientedAnglularVelocityKeyboard = drivebase
                                 .driveFieldOriented(driveAngularVelocityKeyboard);
@@ -195,18 +185,17 @@ public class RobotContainer {
                         m_driverStick.Button(5).onTrue(Commands.none());
                         m_driverStick.Button(6).onTrue(Commands.none());
                 } else {
-                        m_driverStick.Button(7).onTrue((Commands.runOnce(drivebase::zeroGyro)));
-                        m_driverStick.Button(8).onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-                        m_driverStick.Button(9).whileTrue(
+                        m_driverStick.Button(1).onTrue((Commands.runOnce(drivebase::zeroGyro)));
+                        m_driverStick.Button(2).onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+                        m_driverStick.Button(3).whileTrue(
                                         drivebase.driveToPose(
                                                         new Pose2d(new Translation2d(4, 4),
                                                                         Rotation2d.fromDegrees(0))));
-                        m_driverStick.Button(10).whileTrue(Commands.none());
-                        m_driverStick.Button(11).whileTrue(Commands.none());
-                        m_driverStick.Button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-                        m_driverStick.Button(13).onTrue(Commands.none());
+                        m_driverStick.Button(4).whileTrue(Commands.none());
+                        m_driverStick.Button(5).whileTrue(Commands.none());
+                        m_driverStick.Button(6).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+                        m_driverStick.Button(7).onTrue(Commands.none());
                 }
-
         }
 
         private void configureNamedCommands() {
