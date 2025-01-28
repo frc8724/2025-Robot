@@ -35,6 +35,10 @@ public class MayhemExtreme3dPro {
         return () -> m_joystick.getRawAxis(axis.getValue());
     }
 
+    public double getRawAxis(Axis axis) {
+        return m_joystick.getRawAxis(axis.getValue());
+    }
+
     public double DeadbandAxis(Axis axis, double deadband) {
         double val = m_joystick.getRawAxis(axis.getValue());
 
