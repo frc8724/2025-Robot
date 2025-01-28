@@ -177,34 +177,37 @@ public class RobotContainer {
                 drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
                 // }
 
-                if (Robot.isSimulation()) {
-                        m_driverStick.Button(12).onTrue(Commands
-                                        .runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-                        m_driverStick.Button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+                // if (Robot.isSimulation()) {
+                // m_driverStick.Button(12).onTrue(Commands
+                // .runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+                // m_driverStick.Button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
 
-                }
-                if (DriverStation.isTest()) {
-                        drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command
-                                                                                         // above!
+                // }
+                // if (DriverStation.isTest()) {
+                // drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides
+                // drive command
+                // // above!
 
-                        m_driverStick.Button(1).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-                        m_driverStick.Button(2).whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
-                        m_driverStick.Button(3).onTrue((Commands.runOnce(drivebase::zeroGyro)));
-                        m_driverStick.Button(4).whileTrue(drivebase.centerModulesCommand());
-                        m_driverStick.Button(5).onTrue(Commands.none());
-                        m_driverStick.Button(6).onTrue(Commands.none());
-                } else {
-                        m_driverStick.Button(1).onTrue((Commands.runOnce(drivebase::zeroGyro)));
-                        m_driverStick.Button(2).onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-                        m_driverStick.Button(3).whileTrue(
-                                        drivebase.driveToPose(
-                                                        new Pose2d(new Translation2d(4, 4),
-                                                                        Rotation2d.fromDegrees(0))));
-                        m_driverStick.Button(4).whileTrue(Commands.none());
-                        m_driverStick.Button(5).whileTrue(Commands.none());
-                        m_driverStick.Button(6).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-                        m_driverStick.Button(7).onTrue(Commands.none());
-                }
+                // m_driverStick.Button(1).whileTrue(Commands.runOnce(drivebase::lock,
+                // drivebase).repeatedly());
+                // m_driverStick.Button(2).whileTrue(drivebase.driveToDistanceCommand(1.0,
+                // 0.2));
+                // m_driverStick.Button(3).onTrue((Commands.runOnce(drivebase::zeroGyro)));
+                // m_driverStick.Button(4).whileTrue(drivebase.centerModulesCommand());
+                // m_driverStick.Button(5).onTrue(Commands.none());
+                // m_driverStick.Button(6).onTrue(Commands.none());
+                // } else {
+                m_driverStick.Button(1).onTrue((Commands.runOnce(drivebase::zeroGyro)));
+                m_driverStick.Button(2).onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+                m_driverStick.Button(3).whileTrue(
+                                drivebase.driveToPose(
+                                                new Pose2d(new Translation2d(4, 4),
+                                                                Rotation2d.fromDegrees(0))));
+                m_driverStick.Button(4).whileTrue(Commands.none());
+                m_driverStick.Button(5).whileTrue(Commands.none());
+                m_driverStick.Button(6).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+                m_driverStick.Button(7).onTrue(Commands.none());
+                // }
         }
 
         private void configureNamedCommands() {
