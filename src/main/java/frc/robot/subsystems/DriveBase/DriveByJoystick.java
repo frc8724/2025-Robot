@@ -16,32 +16,32 @@ public class DriveByJoystick extends Command {
   /** Creates a new DriveByJoystick. */
   public DriveByJoystick(MayhemExtreme3dPro joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.m_robotDrive);
+    // addRequirements(RobotContainer.m_robotDrive);
     m_joystick = joystick;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_robotDrive.drive(
-        -m_joystick.DeadbandAxis(MayhemExtreme3dPro.Axis.Y,
-            0.10)
-            * DriveConstants.kMaxSpeedMetersPerSecond
-            * (m_joystick.Button(11).getAsBoolean()
-                ? DriveConstants.kSlowDriveModifier
-                : DriveConstants.kFullDriveModifier),
-        -m_joystick.DeadbandAxis(MayhemExtreme3dPro.Axis.X,
-            0.10)
-            * DriveConstants.kMaxSpeedMetersPerSecond
-            * (m_joystick.Button(11).getAsBoolean()
-                ? DriveConstants.kSlowDriveModifier
-                : DriveConstants.kFullDriveModifier),
-        -m_joystick.DeadbandAxis(MayhemExtreme3dPro.Axis.Z,
-            0.40)
-            * ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond
-            * (m_joystick.Button(11).getAsBoolean()
-                ? DriveConstants.kSlowDriveModifier
-                : DriveConstants.kFullDriveModifier),
-        true);
+    // RobotContainer.m_robotDrive.drive(
+    //     -m_joystick.DeadbandAxis(MayhemExtreme3dPro.Axis.Y,
+    //         0.10)
+    //         * DriveConstants.kMaxSpeedMetersPerSecond
+    //         * (m_joystick.Button(11).getAsBoolean()
+    //             ? DriveConstants.kSlowDriveModifier
+    //             : DriveConstants.kFullDriveModifier),
+    //     -m_joystick.DeadbandAxis(MayhemExtreme3dPro.Axis.X,
+    //         0.10)
+    //         * DriveConstants.kMaxSpeedMetersPerSecond
+    //         * (m_joystick.Button(11).getAsBoolean()
+    //             ? DriveConstants.kSlowDriveModifier
+    //             : DriveConstants.kFullDriveModifier),
+    //     -m_joystick.DeadbandAxis(MayhemExtreme3dPro.Axis.Z,
+    //         0.40)
+    //         * ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond
+    //         * (m_joystick.Button(11).getAsBoolean()
+    //             ? DriveConstants.kSlowDriveModifier
+    //             : DriveConstants.kFullDriveModifier),
+    //     true);
   }
 }

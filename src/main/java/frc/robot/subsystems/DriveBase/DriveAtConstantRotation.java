@@ -22,7 +22,7 @@ public class DriveAtConstantRotation extends Command {
     m_rotationSpeed = rotationSpeed;
     m_direction = direction;
     m_distance = distance;
-    addRequirements(RobotContainer.m_robotDrive);
+    // addRequirements(RobotContainer.m_robotDrive);
   }
 
   // Called when the command is initially scheduled.
@@ -31,19 +31,19 @@ public class DriveAtConstantRotation extends Command {
 
   @Override
   public void initialize() {
-    this.pose = RobotContainer.m_robotDrive.getPose();
-    RobotContainer.m_robotDrive.driveOnHeadingWithRotation(m_startingSpeed, m_direction, m_rotationSpeed);
+    // this.pose = RobotContainer.m_robotDrive.getPose();
+    // RobotContainer.m_robotDrive.driveOnHeadingWithRotation(m_startingSpeed, m_direction, m_rotationSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
 
   public void execute() {
-    Pose2d p = RobotContainer.m_robotDrive.getPose();
-    double dist = getDistance(p.getX() - this.pose.getX(), p.getY() - this.pose.getY());
+    // Pose2d p = RobotContainer.m_robotDrive.getPose();
+    // double dist = getDistance(p.getX() - this.pose.getX(), p.getY() - this.pose.getY());
 
-    double power = m_startingSpeed + dist / m_distance * (this.m_finalSpeed - m_startingSpeed);
+    // double power = m_startingSpeed + dist / m_distance * (this.m_finalSpeed - m_startingSpeed);
 
-    RobotContainer.m_robotDrive.driveOnHeadingWithRotation(power, m_direction, m_rotationSpeed);
+    // RobotContainer.m_robotDrive.driveOnHeadingWithRotation(power, m_direction, m_rotationSpeed);
   }
 
   // Called once the command ends or is interrupted.
@@ -58,9 +58,10 @@ public class DriveAtConstantRotation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    Pose2d p = RobotContainer.m_robotDrive.getPose();
-    double dist = getDistance(p.getX() - this.pose.getX(), p.getY() - this.pose.getY());
+    // Pose2d p = RobotContainer.m_robotDrive.getPose();
+    // double dist = getDistance(p.getX() - this.pose.getX(), p.getY() - this.pose.getY());
     // System.out.println("Distance =" + dist);
-    return dist >= m_distance;
+    // return dist >= m_distance;
+    return true;
   }
 }

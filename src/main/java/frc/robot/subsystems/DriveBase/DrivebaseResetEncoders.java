@@ -13,12 +13,12 @@ import frc.robot.RobotContainer;
 public class DrivebaseResetEncoders extends InstantCommand {
   public DrivebaseResetEncoders() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.m_robotDrive);
+    // addRequirements(RobotContainer.m_robotDrive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.m_robotDrive.resetEncoders();
+    // RobotContainer.m_robotDrive.resetEncoders();
   }
 }

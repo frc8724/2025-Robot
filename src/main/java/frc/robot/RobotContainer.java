@@ -42,7 +42,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-        public static final DriveBaseSubsystem m_robotDrive = new DriveBaseSubsystem();
+        // public static final DriveBaseSubsystem m_robotDrive = new DriveBaseSubsystem();
+        // public static final 
 
         // public static final Targeting m_targets = new Targeting();
         private static final MayhemExtreme3dPro m_driverStick = new MayhemExtreme3dPro(0);
@@ -63,19 +64,19 @@ public class RobotContainer {
                 // m_robotDrive.setDefaultCommand(new DriveByJoystick(m_driverStick));
 
                 m_driverStick.Button(9).onTrue(new DriveZeroGyro(0));
-                m_driverStick.Button(11).onTrue(m_robotDrive.ResetTurning());
-                m_driverStick.Button(1).onTrue(m_robotDrive.print());
+                // m_driverStick.Button(11).onTrue(m_robotDrive.ResetTurning());
+                // m_driverStick.Button(1).onTrue(m_robotDrive.print());
 
-                m_driverStick.Button(7).onTrue(m_robotDrive.SetWheesAtCmd(0));
-                m_driverStick.Button(8).onTrue(m_robotDrive.SetWheesAtCmd(1.5));
-                m_driverStick.Button(9).onTrue(m_robotDrive.SetWheesAtCmd(-1.5));
-                m_driverStick.Button(10).onTrue(m_robotDrive.SetWheesAtCmd(3.14));
+                // m_driverStick.Button(7).onTrue(m_robotDrive.SetWheesAtCmd(0));
+                // m_driverStick.Button(8).onTrue(m_robotDrive.SetWheesAtCmd(1.5));
+                // m_driverStick.Button(9).onTrue(m_robotDrive.SetWheesAtCmd(-1.5));
+                // m_driverStick.Button(10).onTrue(m_robotDrive.SetWheesAtCmd(3.14));
 
 
                 m_auto.addAuto(new WaitCommand(5));
                 m_auto.addAuto(new AutoDriveOut());
 
-                m_robotDrive.ResetTurning();
+                // m_robotDrive.ResetTurning();
         }
 
         /**

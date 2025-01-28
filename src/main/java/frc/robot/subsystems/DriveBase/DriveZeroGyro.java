@@ -17,12 +17,12 @@ public class DriveZeroGyro extends InstantCommand {
 
     public DriveZeroGyro(double d) {
         startingAngle = d;
-        addRequirements(RobotContainer.m_robotDrive);
+        // addRequirements(RobotContainer.m_robotDrive);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        RobotContainer.m_robotDrive.zeroGyro(this.startingAngle);
+        // RobotContainer.m_robotDrive.zeroGyro(this.startingAngle);
     }
 }

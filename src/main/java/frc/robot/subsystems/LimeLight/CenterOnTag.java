@@ -18,7 +18,7 @@ import frc.robot.RobotContainer;
 
 public class CenterOnTag extends Command {
   public CenterOnTag() {
-    addRequirements(RobotContainer.m_robotDrive);
+    // addRequirements(RobotContainer.m_robotDrive);
     addRequirements(RobotContainer.m_limelight);
   }
 
@@ -27,15 +27,15 @@ public class CenterOnTag extends Command {
   public void initialize() {
     if (RobotContainer.m_limelight.getTv() == 1)
     {
-        Pose2d currentPose2d = RobotContainer.m_robotDrive.getPose();
+        // Pose2d currentPose2d = RobotContainer.m_robotDrive.getPose();
 
         double x_offset = RobotContainer.m_limelight.getTx();
         double y_offset = RobotContainer.m_limelight.getTy();
         double a_offset = RobotContainer.m_limelight.getTa();
 
-        double new_y = currentPose2d.getY() + y_offset;
-        double new_x = currentPose2d.getX() + x_offset;
-        double new_a = currentPose2d.getRotation().getDegrees() + a_offset;
+        // double new_y = currentPose2d.getY() + y_offset;
+        // double new_x = currentPose2d.getX() + x_offset;
+        // double new_a = currentPose2d.getRotation().getDegrees() + a_offset;
 
         TrajectoryConfig config =
         new TrajectoryConfig(
@@ -45,12 +45,12 @@ public class CenterOnTag extends Command {
 
         var interiorWaypoints = new ArrayList<Translation2d>();
 
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-          RobotContainer.m_robotDrive.getPose(),
-          interiorWaypoints,
-          new Pose2d(new_x, new_y, new Rotation2d(new_a)),
-          config
-        );
+        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        //   RobotContainer.m_robotDrive.getPose(),
+        //   interiorWaypoints,
+        //   new Pose2d(new_x, new_y, new Rotation2d(new_a)),
+        //   config
+        // );
 
 
         // while (RobotContainer.m_limelight.getTx() > 0.2) {
