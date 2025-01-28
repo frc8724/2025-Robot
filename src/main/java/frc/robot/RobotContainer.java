@@ -54,7 +54,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
  */
 public class RobotContainer {
         private static final MayhemExtreme3dPro m_driverStick = new MayhemExtreme3dPro(0);
-        private static final MayhemOperatorPad m_operatorPad = new MayhemOperatorPad();
+        // private static final MayhemOperatorPad m_operatorPad = new
+        // MayhemOperatorPad();
 
         // public static final DriveBaseSubsystem m_robotDrive = new
         // DriveBaseSubsystem();
