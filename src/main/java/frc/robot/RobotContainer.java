@@ -69,8 +69,8 @@ public class RobotContainer {
          * by angular velocity.
          */
         SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                        () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
-                        () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
+                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
+                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
                         .withControllerRotationAxis(m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z))
                         .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.8).allianceRelativeControl(true);
 
@@ -78,34 +78,37 @@ public class RobotContainer {
          * Clone the angular velocity input stream and converts it to a fieldRelative
          * input stream.
          */
-        SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
-                        .withControllerHeadingAxis(m_driverStick.Axis(MayhemExtreme3dPro.Axis.X),
-                                        m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y))
-                        .headingWhile(true);
+        // SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
+        // .withControllerHeadingAxis(m_driverStick.Axis(MayhemExtreme3dPro.Axis.X),
+        // m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y))
+        // .headingWhile(true);
 
         /**
          * Clone the angular velocity input stream and converts it to a robotRelative
          * input stream.
          */
-        SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(true)
-                        .allianceRelativeControl(false);
+        // SwerveInputStream driveRobotOriented =
+        // driveAngularVelocity.copy().robotRelative(true)
+        // .allianceRelativeControl(false);
 
-        SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                        () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
-                        () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
-                        .withControllerRotationAxis(
-                                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble())
-                        .deadband(OperatorConstants.DEADBAND)
-                        .scaleTranslation(0.8).allianceRelativeControl(true);
+        // SwerveInputStream driveAngularVelocityKeyboard =
+        // SwerveInputStream.of(drivebase.getSwerveDrive(),
+        // () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
+        // () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
+        // .withControllerRotationAxis(
+        // () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble())
+        // .deadband(OperatorConstants.DEADBAND)
+        // .scaleTranslation(0.8).allianceRelativeControl(true);
 
         // Derive the heading axis with math!
-        SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
-                        .withControllerHeadingAxis(() -> Math.sin(
-                                        m_driverStick.getRawAxis(MayhemExtreme3dPro.Axis.X) * Math.PI)
-                                        * (Math.PI * 2),
-                                        () -> Math.cos(m_driverStick.getRawAxis(MayhemExtreme3dPro.Axis.X) * Math.PI)
-                                                        * (Math.PI * 2))
-                        .headingWhile(true);
+        // SwerveInputStream driveDirectAngleKeyboard =
+        // driveAngularVelocityKeyboard.copy()
+        // .withControllerHeadingAxis(() -> Math.sin(
+        // m_driverStick.getRawAxis(MayhemExtreme3dPro.Axis.X) * Math.PI)
+        // * (Math.PI * 2),
+        // () -> Math.cos(m_driverStick.getRawAxis(MayhemExtreme3dPro.Axis.X) * Math.PI)
+        // * (Math.PI * 2))
+        // .headingWhile(true);
 
         // public static final Targeting m_targets = new Targeting();
         // private static final MayhemLogitechAttack3 operatorStick = new
@@ -153,21 +156,26 @@ public class RobotContainer {
          */
         private void configureBindings() {
 
-                Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
+                // Command driveFieldOrientedDirectAngle =
+                // drivebase.driveFieldOriented(driveDirectAngle);
                 Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
-                Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
-                Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
-                Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
-                Command driveFieldOrientedAnglularVelocityKeyboard = drivebase
-                                .driveFieldOriented(driveAngularVelocityKeyboard);
-                Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
-                                driveDirectAngleKeyboard);
+                // Command driveRobotOrientedAngularVelocity =
+                // drivebase.driveFieldOriented(driveRobotOriented);
+                // Command driveSetpointGen =
+                // drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
+                // Command driveFieldOrientedDirectAngleKeyboard =
+                // drivebase.driveFieldOriented(driveDirectAngleKeyboard);
+                // Command driveFieldOrientedAnglularVelocityKeyboard = drivebase
+                // .driveFieldOriented(driveAngularVelocityKeyboard);
+                // Command driveSetpointGenKeyboard =
+                // drivebase.driveWithSetpointGeneratorFieldRelative(
+                // driveDirectAngleKeyboard);
 
-                if (RobotBase.isSimulation()) {
-                        drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
-                } else {
-                        drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-                }
+                // if (RobotBase.isSimulation()) {
+                // drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+                // } else {
+                drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+                // }
 
                 if (Robot.isSimulation()) {
                         m_driverStick.Button(12).onTrue(Commands
