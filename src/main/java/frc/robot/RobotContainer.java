@@ -72,7 +72,7 @@ public class RobotContainer {
                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
                         .withControllerRotationAxis(m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z))
-                        .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.8).allianceRelativeControl(true);
+                        .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.2).allianceRelativeControl(true);
 
         /**
          * Clone the angular velocity input stream and converts it to a fieldRelative
