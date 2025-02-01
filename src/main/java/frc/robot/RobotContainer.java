@@ -199,10 +199,10 @@ public class RobotContainer {
                 // } else {
                 m_driverStick.Button(1).onTrue((Commands.runOnce(drivebase::zeroGyro)));
                 m_driverStick.Button(2).onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-                m_driverStick.Button(3).whileTrue(
-                                drivebase.driveToPose(
-                                                new Pose2d(new Translation2d(4, 4),
-                                                                Rotation2d.fromDegrees(0))));
+                // m_driverStick.Button(3).whileTrue(
+                // drivebase.driveToPose(
+                // new Pose2d(new Translation2d(4, 4),
+                // Rotation2d.fromDegrees(0))));
                 m_driverStick.Button(4).whileTrue(Commands.none());
                 m_driverStick.Button(5).whileTrue(Commands.none());
                 m_driverStick.Button(6).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
@@ -221,10 +221,13 @@ public class RobotContainer {
         public Command getAutonomousCommand() {
 
                 // An example command will be run in autonomous
-                // return new PathPlannerAuto("StartCenterScore3");
-                return new SequentialCommandGroup(
-                                new SystemStopAllMotors(),
-                                m_auto.getAutoCommand());
+                // return new PathPlannerAuto("New Auto");
+                // return new SequentialCommandGroup(
+                // new SystemStopAllMotors(),
+                // m_auto.getAutoCommand());
                 // new PathPlannerAuto("StartCenterShortShoot3Left"));
+                return new Command() {
+
+                };
         }
 }
