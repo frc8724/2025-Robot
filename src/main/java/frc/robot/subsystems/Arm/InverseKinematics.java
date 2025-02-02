@@ -2,24 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.controls;
-
-// import frc.robot.controls.ModuleConstants;
+package frc.robot.subsystems.Arm;
 
 /** Inverse Kinematics */
 public class InverseKinematics {
     public class ModuleConstants {
-        public static final int ARM_SHOULDER_LENGTH = 30;
-        public static final double ARM_ELBOW_LENGTH = 30;
+        public static final int ARM_SHOULDER_LENGTH = 24;
+        public static final double ARM_ELBOW_LENGTH = 24;
     }
 
     public static class DoubleJointedArmAngles {
-        public double shoulderAngle;
-        public double elbowAngle;
+        public double shoulderAngleRads;
+        public double elbowAngleRads;
 
         public DoubleJointedArmAngles() {
-            shoulderAngle = 0;
-            elbowAngle = 0;
+            shoulderAngleRads = 0;
+            elbowAngleRads = 0;
         }
     };
 
@@ -36,12 +34,12 @@ public class InverseKinematics {
 
         // Calculate the shoulder angle
         double q2 = - Math.acos((x * x + y * y - (a1 * a1) - (a2 * a2)) / (2 * a1 * a2));
-        angles.elbowAngle = -q2;
+        angles.elbowAngleRads = -q2;
 
         // Calculate the elbow angle
         double q1 = Math.atan2(y, x)
                 + Math.atan2(a2 * Math.sin(q2), a1 + a2 * Math.cos(q2));
-        angles.shoulderAngle = q1;
+        angles.shoulderAngleRads = q1;
         return angles;
     }
 
@@ -64,12 +62,12 @@ public class InverseKinematics {
 
         // Calculate the shoulder angle
         double q2 = Math.acos((x * x + y * y - (a1 * a1) - (a2 * a2)) / (2 * a1 * a2));
-        angles.elbowAngle = -q2;
+        angles.elbowAngleRads = -q2;
 
         // Calculate the elbow angle
         double q1 = Math.atan2(y, x)
                 + Math.atan2(a2 * Math.sin(q2), a1 + a2 * Math.cos(q2));
-        angles.shoulderAngle = q1;
+        angles.shoulderAngleRads = q1;
 
         // System.out.println(String.format("a2: %.4f, q2: %.1f, sin(q2): %.4f, a1: %.4f, cos(q2): %.4f", a2 , q2, Math.sin(q2), a1 ,Math.cos(q2)));
         return angles;
@@ -78,7 +76,7 @@ public class InverseKinematics {
     public static DoubleJointedArmAngles getPreferredArmAngles(double x, double y) {
         var a1 = getDoubleJointedArmAngles(x, y);
         var a2 = getDoubleJointedArmAnglesB(x, y);
-        if( Math.sin(a1.shoulderAngle) > Math.sin(a2.shoulderAngle)) {
+        if( Math.sin(a1.shoulderAngleRads) > Math.sin(a2.shoulderAngleRads)) {
             return a1;
         }
         return a2;
@@ -99,12 +97,12 @@ public class InverseKinematics {
         var pt3 = getPreferredArmAngles(x, y);
         System.out.println(String.format("Target: (%.1f, %.1f),  %.1f, %.1f or %.1f, %.1f     %.1f, %.1f",
                 x, y, 
-                radiansToDegrees(pt1.shoulderAngle), 
-                radiansToDegrees(pt1.elbowAngle), 
-                radiansToDegrees(pt2.shoulderAngle), 
-                radiansToDegrees(pt2.elbowAngle),
-                radiansToDegrees(pt3.shoulderAngle), 
-                radiansToDegrees(pt3.elbowAngle)
+                radiansToDegrees(pt1.shoulderAngleRads), 
+                radiansToDegrees(pt1.elbowAngleRads), 
+                radiansToDegrees(pt2.shoulderAngleRads), 
+                radiansToDegrees(pt2.elbowAngleRads),
+                radiansToDegrees(pt3.shoulderAngleRads), 
+                radiansToDegrees(pt3.elbowAngleRads)
                 // radiansToDegrees(Math.atan2(y, x)
                 // )
                 )
