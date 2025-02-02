@@ -5,8 +5,6 @@
 package frc.robot.subsystems.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.DriveBase.DriveZeroGyro;
-import frc.robot.subsystems.DriveBase.DriveZeroWheels;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -15,7 +13,6 @@ public class AutoStartingPosition extends SequentialCommandGroup {
   /** Creates a new AutoStartingPosition. */
   public AutoStartingPosition(double startingAngle) {
     addCommands(
-        new DriveZeroWheels(),
         // new DriveZeroGyro(0.0),
         // new WaitCommand(0.1),
         // new DrivebaseResetEncoders(),
@@ -32,7 +29,7 @@ public class AutoStartingPosition extends SequentialCommandGroup {
         // RobotContainer.m_robotDrive),
         // new WaitCommand(0.1),
         // new DriveZeroWheels(),
-        new DriveZeroGyro(-startingAngle)
+        // new DriveZeroGyro(-startingAngle)
     // new SystemArmZero()
     );
   }

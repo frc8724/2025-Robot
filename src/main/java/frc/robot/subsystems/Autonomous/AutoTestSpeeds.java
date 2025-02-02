@@ -6,7 +6,6 @@ package frc.robot.subsystems.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.DriveBase.DriveForDistance;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -17,8 +16,9 @@ public class AutoTestSpeeds extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new DriveForDistance(0.1, 2.0, 0, 0, 0.5),
-        new WaitCommand(1.0),
-        new DriveForDistance(2.0, 0.1, 0, 0, 0.5));
+        // new DriveForDistance(0.1, 2.0, 0, 0, 0.5),
+        new WaitCommand(1.0)
+        // new DriveForDistance(2.0, 0.1, 0, 0, 0.5)
+        );
   }
 }
