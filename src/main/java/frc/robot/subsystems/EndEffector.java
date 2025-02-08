@@ -17,6 +17,8 @@ public class EndEffector extends SubsystemBase {
   TalonFX motorFx = new TalonFX(Constants.DriveConstants.kEndEffector);
   DutyCycleOut output = new DutyCycleOut(0);
   DigitalInput limitSwitch = new DigitalInput(0);
+  boolean intaking;
+  double intakeSpeed;
 
   /** Creates a new EndEffector. */
   public EndEffector() {
@@ -26,15 +28,20 @@ public class EndEffector extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // if the limit switch is pressed, stop the motor.
-    if (!limitSwitch.get()) {
-      setSpeed(0);
+    if (intaking) {
+      // if the limit switch is pressed, stop the motor.
+      if (!limitSwitch.get()) {
+        motorFx.setControl(output.withOutput(0));
+      } else { // if the limit switch it not pressed, intake more
+        motorFx.setControl(output.withOutput(intakeSpeed));
+      }
     }
 
     SmartDashboard.putBoolean("EndEffector Limit Switch", limitSwitch.get());
   }
 
   public void setSpeed(double d) {
+    this.intaking = d > 0;
     motorFx.setControl(output.withOutput(d));
   }
 

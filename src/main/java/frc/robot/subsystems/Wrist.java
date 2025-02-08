@@ -4,9 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,14 +22,34 @@ public class Wrist extends SubsystemBase {
   DutyCycleOut output = new DutyCycleOut(0);
   Encoder encoder = new Encoder(1, 2);
 
+  PIDController pid = new PIDController(0, 0, 0);
+  boolean positionMode;
+  double positionSetpoint;
+
   /** Creates a new Wrist. */
   public Wrist() {
+    pid.setTolerance(5, 10);
+
+    var config = new TalonFXConfiguration();
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    motorFx.getConfigurator().apply(config);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    double wristPower = pid.calculate(encoder.get(), positionSetpoint);
+
+    wristPower = MathUtil.clamp(wristPower, -.5, .5);
+
+    if (positionMode) {
+      motorFx.setControl(output.withOutput(wristPower));
+    }
+
     SmartDashboard.putNumber("Wrist Encoder", encoder.get());
+    SmartDashboard.putNumber("Wrist Position Power", wristPower);
+
   }
 
   public void setSpeed(double d) {

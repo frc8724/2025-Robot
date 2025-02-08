@@ -38,6 +38,9 @@ public class Arm extends SubsystemBase {
   double elbowSetpoint;
   double shoulderSetpoint;
 
+  final double ElbowEncoderOffset = 0;
+  final double ShoulderEncoderOffset = 0;
+
   /** Creates a new Arm. */
   public Arm() {
     elbowPid.setTolerance(5, 10);
@@ -119,6 +122,22 @@ public class Arm extends SubsystemBase {
   public Command setShoulderPositionCmd(double d) {
     return runOnce(() -> {
       setShoulderPosition(d);
+    });
+  }
+
+  double convertRadianToEncoder(double x, double offset) {
+    return x / (2 * Math.PI) * 4095 + offset;
+  }
+
+  public Command setArmPositionCmd(double x, double y) {
+    var angles = InverseKinematics.getPreferredArmAngles(x, y);
+
+    double elbowEncoderCounts = convertRadianToEncoder(angles.elbowAngleRads, ElbowEncoderOffset);
+    double shoulderEncoderCounts = convertRadianToEncoder(angles.shoulderAngleRads, ShoulderEncoderOffset);
+
+    return runOnce(() -> {
+      setShoulderPosition(shoulderEncoderCounts);
+      setElbowPosition(elbowEncoderCounts);
     });
   }
 }
