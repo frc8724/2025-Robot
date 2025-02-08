@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
@@ -22,9 +23,13 @@ public class Wrist extends SubsystemBase {
   DutyCycleOut output = new DutyCycleOut(0);
   Encoder encoder = new Encoder(1, 2);
 
-  PIDController pid = new PIDController(0, 0, 0);
+  PIDController pid = new PIDController(0.01, 0, 0);
   boolean positionMode;
   double positionSetpoint;
+
+  final double Plus_90_Degrees = 233;
+  final double Minus_90_Degrees = -802;
+  final double EncoderTicksPerRevolution = 2048;
 
   /** Creates a new Wrist. */
   public Wrist() {
@@ -32,6 +37,7 @@ public class Wrist extends SubsystemBase {
 
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     motorFx.getConfigurator().apply(config);
   }
 
@@ -49,10 +55,10 @@ public class Wrist extends SubsystemBase {
 
     SmartDashboard.putNumber("Wrist Encoder", encoder.get());
     SmartDashboard.putNumber("Wrist Position Power", wristPower);
-
   }
 
   public void setSpeed(double d) {
+    positionMode = false;
     motorFx.setControl(output.withOutput(d));
   }
 
@@ -63,7 +69,8 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setPosition(double d) {
-
+    positionMode = true;
+    positionSetpoint = d;
   }
 
   public Command setPositionCmd(double d) {

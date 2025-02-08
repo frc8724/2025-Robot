@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Arm;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -29,7 +30,7 @@ public class Arm extends SubsystemBase {
 
   DutyCycleOut output = new DutyCycleOut(0);
 
-  PIDController elbowPid = new PIDController(0, 0, 0);
+  PIDController elbowPid = new PIDController(0.0009, 0, 0);
   PIDController shoulderPid = new PIDController(0, 0, 0);
 
   boolean elbowPosMode = false;
@@ -41,9 +42,12 @@ public class Arm extends SubsystemBase {
   final double ElbowEncoderOffset = 0;
   final double ShoulderEncoderOffset = 0;
 
+  final double ElbowEncoderTicksPerRevolution = 4096;
+  final double ElbowEncoderTickeAtVertical = 4011;
+
   /** Creates a new Arm. */
   public Arm() {
-    elbowPid.setTolerance(5, 10);
+    elbowPid.setTolerance(30, 100);
     shoulderPid.setTolerance(5, 10);
 
     elbowPid.enableContinuousInput(0, 4095);
@@ -51,11 +55,15 @@ public class Arm extends SubsystemBase {
 
     shoulderLeft.setControl(new Follower(Constants.DriveConstants.kShoulderRightMotor, true));
 
-    var config = new TalonFXConfiguration();
-    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    shoulderLeft.getConfigurator().apply(config);
-    shoulderRight.getConfigurator().apply(config);
-    elbow.getConfigurator().apply(config);
+    var shoulderConfig = new TalonFXConfiguration();
+    shoulderConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    shoulderLeft.getConfigurator().apply(shoulderConfig);
+    shoulderRight.getConfigurator().apply(shoulderConfig);
+
+    var elbowConfig = new TalonFXConfiguration();
+    elbowConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    elbowConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    elbow.getConfigurator().apply(elbowConfig);
   }
 
   @Override
@@ -78,6 +86,7 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Shoulder Encoder", shoulderEncoder.getValue());
     SmartDashboard.putNumber("Elbow Encoder", elbowEncoder.getValue());
     SmartDashboard.putNumber("Elbow Position Power", elbowPower);
+    SmartDashboard.putNumber("Elbow Position Setpoint", elbowSetpoint);
     SmartDashboard.putNumber("Shoulder Position Power", shoulderPower);
   }
 

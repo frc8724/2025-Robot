@@ -212,6 +212,11 @@ public class RobotContainer {
                 m_driverStick.Button(2).onTrue(endEffector.setSpeedCmd(-.3));
                 m_driverStick.Button(2).onFalse(endEffector.setSpeedCmd(0));
 
+                // m_driverStick.Button(3).onTrue(wrist.setPositionCmd(512));
+                // m_driverStick.Button(4).onTrue(wrist.setPositionCmd(0));
+                m_driverStick.Button(3).onTrue(arm.setElbowPositionCmd(4011));
+                m_driverStick.Button(4).onTrue(arm.setElbowPositionCmd((4011 + 512) % 4096));
+
                 m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
                 m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
                 m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
