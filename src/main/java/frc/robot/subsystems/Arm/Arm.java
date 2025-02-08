@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
   DutyCycleOut output = new DutyCycleOut(0);
 
   PIDController elbowPid = new PIDController(0.0009, 0, 0);
-  PIDController shoulderPid = new PIDController(0, 0, 0);
+  PIDController shoulderPid = new PIDController(0.001, 0, 0);
 
   boolean elbowPosMode = false;
   boolean shoulderPosMode = false;
@@ -44,11 +44,12 @@ public class Arm extends SubsystemBase {
 
   final double ElbowEncoderTicksPerRevolution = 4096;
   final double ElbowEncoderTickeAtVertical = 4011;
+  final double ShoulderEncoderTickeAtVertical = 4030;
 
   /** Creates a new Arm. */
   public Arm() {
     elbowPid.setTolerance(30, 100);
-    shoulderPid.setTolerance(5, 10);
+    shoulderPid.setTolerance(30, 100);
 
     elbowPid.enableContinuousInput(0, 4095);
     shoulderPid.enableContinuousInput(0, 4095);
@@ -88,6 +89,7 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Elbow Position Power", elbowPower);
     SmartDashboard.putNumber("Elbow Position Setpoint", elbowSetpoint);
     SmartDashboard.putNumber("Shoulder Position Power", shoulderPower);
+    SmartDashboard.putNumber("Shoulder Position Setpoint", shoulderSetpoint);
   }
 
   public void setShoulderSpeed(double d) {
@@ -125,6 +127,13 @@ public class Arm extends SubsystemBase {
 
   public void setShoulderPosition(double d) {
     shoulderPosMode = true;
+
+    if (d > 130 && d < 2048) {
+      d = 130;
+    }
+    if (d < 3800 && d > 2048) {
+      d = 3800;
+    }
     shoulderSetpoint = d;
   }
 
