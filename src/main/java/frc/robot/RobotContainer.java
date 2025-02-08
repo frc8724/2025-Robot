@@ -216,8 +216,24 @@ public class RobotContainer {
                 // m_driverStick.Button(4).onTrue(wrist.setPositionCmd(0));
                 // m_driverStick.Button(3).onTrue(arm.setElbowPositionCmd(4011));
                 // m_driverStick.Button(4).onTrue(arm.setElbowPositionCmd((4011 + 512) % 4096));
-                m_driverStick.Button(3).onTrue(arm.setShoulderPositionCmd(4030));
-                m_driverStick.Button(4).onTrue(arm.setShoulderPositionCmd((4030 + 256) % 4096));
+                // m_driverStick.Button(3).onTrue(arm.setShoulderPositionCmd(4030));
+                // m_driverStick.Button(4).onTrue(arm.setShoulderPositionCmd((4030 + 256) %
+                // 4096));
+
+                m_driverStick.Button(3).onTrue(
+                                new SequentialCommandGroup(
+                                                wrist.setPositionCmd(225), // wrist
+                                                arm.setElbowPositionCmd(2775), // elbow
+                                                arm.setShoulderPositionCmd(130) // shoulder
+                                ));
+                m_driverStick.Button(4).onTrue(
+                                new SequentialCommandGroup(
+                                                wrist.setPositionCmd(350), // wrist
+                                                arm.setElbowPositionCmd(470), // elbow
+                                                arm.setShoulderPositionCmd(3836) // shoulder
+                                ));
+
+                m_driverStick.Button(5).onTrue(wrist.zeroCmd());
 
                 m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
                 m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));

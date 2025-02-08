@@ -78,4 +78,10 @@ public class Wrist extends SubsystemBase {
       setPosition(d);
     });
   }
+
+  public Command zeroCmd() {
+    return runOnce(() -> {
+      encoder.reset();
+    });
+  }
 }

@@ -42,6 +42,7 @@ public class EndEffector extends SubsystemBase {
 
   public void setSpeed(double d) {
     this.intaking = d > 0;
+    intakeSpeed = d;
     motorFx.setControl(output.withOutput(d));
   }
 
