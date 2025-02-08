@@ -12,6 +12,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.controls.MayhemExtreme3dPro;
 import frc.robot.controls.MayhemLogitechAttack3;
 import frc.robot.controls.MayhemOperatorPad;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.EndEffector;
+import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Autonomous.*;
 import frc.robot.subsystems.Autonomous.test.AutoTestSquare;
 import frc.robot.subsystems.DriveBase.DriveBaseSubsystem;
@@ -64,6 +67,9 @@ public class RobotContainer {
         private final SwerveSubsystem drivebase = new SwerveSubsystem(
                         new File(Filesystem.getDeployDirectory(), "swerve"));
 
+        private final EndEffector endEffector = new EndEffector();
+        private final Wrist wrist = new Wrist();
+        private final Arm arm = new Arm();
         /**
          * Converts driver input into a field-relative ChassisSpeeds that is controlled
          * by angular velocity.
@@ -197,15 +203,35 @@ public class RobotContainer {
                 // m_driverStick.Button(5).onTrue(Commands.none());
                 // m_driverStick.Button(6).onTrue(Commands.none());
                 // } else {
-                m_driverStick.Button(1).onTrue((Commands.runOnce(drivebase::zeroGyro)));
-                m_driverStick.Button(2).onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+                // m_driverStick.Button(1).onTrue((Commands.runOnce(drivebase::zeroGyro)));
+                // m_driverStick.Button(2).onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
                 // m_driverStick.Button(3).whileTrue(
                 // drivebase.driveToPose(
                 // new Pose2d(new Translation2d(4, 4),
                 // Rotation2d.fromDegrees(0))));
-                m_driverStick.Button(4).whileTrue(Commands.none());
-                m_driverStick.Button(5).whileTrue(Commands.none());
-                m_driverStick.Button(6).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+                m_driverStick.Button(1).onTrue(endEffector.setSpeedCmd(.5));
+                m_driverStick.Button(1).onFalse(endEffector.setSpeedCmd(0));
+
+                m_driverStick.Button(2).onTrue(endEffector.setSpeedCmd(-.3));
+                m_driverStick.Button(2).onFalse(endEffector.setSpeedCmd(0));
+
+                m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
+                m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
+                m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
+                m_driverStick.Button(12).onFalse(arm.setShoulderSpeedCmd(0));
+
+                m_driverStick.Button(9).onTrue(arm.setElbowSpeedCmd(-.2));
+                m_driverStick.Button(9).onFalse(arm.setElbowSpeedCmd(0));
+                m_driverStick.Button(10).onTrue(arm.setElbowSpeedCmd(.2));
+                m_driverStick.Button(10).onFalse(arm.setElbowSpeedCmd(0));
+
+                m_driverStick.Button(7).onTrue(wrist.setSpeedCmd(-.2));
+                m_driverStick.Button(7).onFalse(wrist.setSpeedCmd(0));
+                m_driverStick.Button(8).onTrue(wrist.setSpeedCmd(.2));
+                m_driverStick.Button(8).onFalse(wrist.setSpeedCmd(0));
+
+                // m_driverStick.Button(6).whileTrue(Commands.runOnce(drivebase::lock,
+                // drivebase).repeatedly());
                 m_driverStick.Button(7).onTrue(Commands.none());
                 // }
         }
