@@ -6,8 +6,6 @@ package frc.robot.subsystems.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.DriveBase.DriveForDistance;
-import frc.robot.subsystems.DriveBase.DriveZeroWheels;
 // import frc.robot.subsystems.System.SystemArmZero;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,8 +18,8 @@ public class AutoStandStill extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new AutoStartingPosition(0.0),
-        new WaitCommand(10.0),
-        new DriveForDistance(0, 0, 0, 0));
+        new WaitCommand(10.0)
+        );
 
   }
 }
