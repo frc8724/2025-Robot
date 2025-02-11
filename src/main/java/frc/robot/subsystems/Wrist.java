@@ -57,6 +57,14 @@ public class Wrist extends SubsystemBase {
     SmartDashboard.putNumber("Wrist Position Power", wristPower);
   }
 
+  public double get() {
+    return encoder.get();
+  }
+
+  public double getSpeed() {
+    return motorFx.get();
+  }
+
   public void setSpeed(double d) {
     positionMode = false;
     motorFx.setControl(output.withOutput(d));
@@ -76,6 +84,12 @@ public class Wrist extends SubsystemBase {
   public Command setPositionCmd(double d) {
     return runOnce(() -> {
       setPosition(d);
+    });
+  }
+
+  public Command setPositionOffset(double d) {
+    return runOnce(() -> {
+      setPosition(positionSetpoint + d);
     });
   }
 

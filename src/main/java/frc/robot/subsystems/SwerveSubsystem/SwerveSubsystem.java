@@ -27,6 +27,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem.Vision.Cameras;
 import java.io.File;
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveDrive;
@@ -360,12 +361,10 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return a Command that drives the swerve drive to a specific distance at a
    *         given speed
    */
-  // public Command driveToDistanceCommand(double distanceInMeters, double
-  // speedInMetersPerSecond) {
-  // return run(() -> drive(new ChassisSpeeds(speedInMetersPerSecond, 0, 0)))
-  // .until(() -> swerveDrive.getPose().getTranslation().getDistance(new
-  // Translation2d(0, 0)) > distanceInMeters);
-  // }
+  public Command driveToDistanceCommand(double distanceInMeters, double speedInMetersPerSecond) {
+    return run(() -> drive(new ChassisSpeeds(speedInMetersPerSecond, 0, 0)))
+        .until(() -> swerveDrive.getPose().getTranslation().getDistance(new Translation2d(0, 0)) > distanceInMeters);
+  }
 
   /**
    * Replaces the swerve module feedforward with a new SimpleMotorFeedforward
@@ -419,27 +418,24 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param headingY     Heading Y to calculate angle of the joystick.
    * @return Drive command.
    */
-  // public Command driveCommand(DoubleSupplier translationX, DoubleSupplier
-  // translationY, DoubleSupplier headingX,
-  // DoubleSupplier headingY)
-  // {
-  // // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
-  // correction for this kind of control.
-  // return run(() -> {
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
+      DoubleSupplier headingY) {
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
+    // correction for this kind of control.
+    return run(() -> {
 
-  // Translation2d scaledInputs = SwerveMath.scaleTranslation(new
-  // Translation2d(translationX.getAsDouble(),
-  // translationY.getAsDouble()), 0.8);
+      Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
+          translationY.getAsDouble()), 0.8);
 
-  // // Make the robot move
-  // driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(),
-  // scaledInputs.getY(),
-  // headingX.getAsDouble(),
-  // headingY.getAsDouble(),
-  // swerveDrive.getOdometryHeading().getRadians(),
-  // swerveDrive.getMaximumChassisVelocity()));
-  // });
-  // }
+      // Make the robot move
+      driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(),
+          scaledInputs.getY(),
+          headingX.getAsDouble(),
+          headingY.getAsDouble(),
+          swerveDrive.getOdometryHeading().getRadians(),
+          swerveDrive.getMaximumChassisVelocity()));
+    });
+  }
 
   /**
    * The primary method for controlling the drivebase. Takes a
@@ -477,10 +473,9 @@ public class SwerveSubsystem extends SubsystemBase {
    *
    * @param velocity Velocity according to the field.
    */
-  // public void driveFieldOriented(ChassisSpeeds velocity)
-  // {
-  // swerveDrive.driveFieldOriented(velocity);
-  // }
+  public void driveFieldOriented(ChassisSpeeds velocity) {
+    swerveDrive.driveFieldOriented(velocity);
+  }
 
   /**
    * Drive the robot given a chassis field oriented velocity.

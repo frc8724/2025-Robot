@@ -9,6 +9,8 @@ import swervelib.SwerveInputStream;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.controls.JoystickPOVButton;
+import frc.robot.controls.MayhemDriverPad;
 import frc.robot.controls.MayhemExtreme3dPro;
 import frc.robot.controls.MayhemLogitechAttack3;
 import frc.robot.controls.MayhemOperatorPad;
@@ -43,7 +45,10 @@ import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import frc.robot.controls.JoystickAxisButton.Direction;
+
 /**
+ * 
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in
@@ -54,19 +59,14 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
  */
 public class RobotContainer {
         private static final MayhemExtreme3dPro m_driverStick = new MayhemExtreme3dPro(0);
-        // private static final MayhemOperatorPad m_operatorPad = new
-        // MayhemOperatorPad();
+        private static final MayhemDriverPad m_operatorPad = new MayhemDriverPad(1);
 
-        // public static final DriveBaseSubsystem m_robotDrive = new
-        // DriveBaseSubsystem();
-        // public static final
-        // The robot's subsystems and commands are defined here...
         private final SwerveSubsystem drivebase = new SwerveSubsystem(
                         new File(Filesystem.getDeployDirectory(), "swerve"));
-
-        private final EndEffector endEffector = new EndEffector();
         private final Wrist wrist = new Wrist();
+        private final EndEffector endEffector = new EndEffector(wrist);
         private final Arm arm = new Arm();
+
         /**
          * Converts driver input into a field-relative ChassisSpeeds that is controlled
          * by angular velocity.
@@ -124,24 +124,11 @@ public class RobotContainer {
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
-                // Configure the trigger bindings
                 configureBindings();
                 configureNamedCommands();
-                // m_robotDrive.setDefaultCommand(new DriveByJoystick(m_driverStick));
-
-                // m_driverStick.Button(9).onTrue(new DriveZeroGyro(0));
-                // m_driverStick.Button(11).onTrue(m_robotDrive.ResetTurning());
-                // m_driverStick.Button(1).onTrue(m_robotDrive.print());
-
-                // m_driverStick.Button(7).onTrue(m_robotDrive.SetWheesAtCmd(0));
-                // m_driverStick.Button(8).onTrue(m_robotDrive.SetWheesAtCmd(1.5));
-                // m_driverStick.Button(9).onTrue(m_robotDrive.SetWheesAtCmd(-1.5));
-                // m_driverStick.Button(10).onTrue(m_robotDrive.SetWheesAtCmd(3.14));
 
                 m_auto.addAuto(new WaitCommand(5));
                 m_auto.addAuto(new AutoDriveOut());
-
-                // m_robotDrive.ResetTurning();
         }
 
         /**
@@ -254,9 +241,83 @@ public class RobotContainer {
                 // drivebase).repeatedly());
                 m_driverStick.Button(7).onTrue(Commands.none());
                 // }
+
+                // Stow - dpad down
+                m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(350, 470, 3836));
+                // Capture Algae - dpad-left
+                m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(350, 470, 3836));
+                // Hold Algae - dpad right
+                m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(ArmPositionCmd(350, 470, 3836));
+                // Score Algae - dpad up
+                m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(ArmPositionCmd(350, 470, 3836));
+
+                // Score L1 - Green
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
+                // Gather from HP - Blue
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
+                // Score L2 - Red
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_B_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
+                // Score L3 - Yellow
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
+
+                // Intake - Right Trigger Top
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onTrue(endEffector.setSpeedCmd(.5));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onFalse(endEffector.setSpeedCmd(0.0));
+                // Out-take - Right Trigger Bottom
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_TRIGGER, Direction.POSITIVE_ONLY)
+                                .onTrue(endEffector.setSpeedCmd(-0.5));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_TRIGGER, Direction.POSITIVE_ONLY)
+                                .onFalse(endEffector.setSpeedCmd(0.0));
+
+                // Knock Off Algae L2 - back
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON).onFalse(ArmPositionCmd(350, 470, 3836));
+
+                // Knock off algae L3 - start
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON).onFalse(ArmPositionCmd(350, 470, 3836));
+
+                // Manual Elbow up-down - left y-axis up/down
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.POSITIVE_ONLY)
+                                .onTrue(arm.setElbowPositionOffset(20));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.NEGATIVE_ONLY)
+                                .onTrue(arm.setElbowPositionOffset(-20));
+                // Manual Shoulder in-out - right x-axis left/right
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_X_AXIS, Direction.POSITIVE_ONLY)
+                                .onTrue(arm.setShoulderPositionOffset(20));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_X_AXIS, Direction.NEGATIVE_ONLY)
+                                .onTrue(arm.setShoulderPositionOffset(-20));
+                // Manual wrist up-down - right y-axis up/down
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS, Direction.POSITIVE_ONLY)
+                                .onTrue(wrist.setPositionOffset(20));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS, Direction.NEGATIVE_ONLY)
+                                .onTrue(wrist.setPositionOffset(-20));
+
+                // Zero Wrist
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_LEFT_BUTTON).onTrue(wrist.zeroCmd());
+                // All Stop
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_TRIGGER, Direction.POSITIVE_ONLY)
+                                .onTrue(allStopCmd());
+
+        }
+
+        private Command allStopCmd() {
+                return new ParallelCommandGroup(
+                                arm.setElbowSpeedCmd(0.0),
+                                arm.setShoulderSpeedCmd(0.0),
+                                wrist.setSpeedCmd(0.0),
+                                endEffector.setSpeedCmd(0.0));
         }
 
         private void configureNamedCommands() {
+        }
+
+        private Command ArmPositionCmd(double wristPos, double elbowPos, double shoulderPos) {
+                return new ParallelCommandGroup(
+                                wrist.setPositionCmd(wristPos), // wrist
+                                arm.setElbowPositionCmd(elbowPos), // elbow
+                                arm.setShoulderPositionCmd(shoulderPos) // shoulder
+                );
         }
 
         /**

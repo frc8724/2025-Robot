@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.*;
  * @author Team1519
  */
 public class JoystickAxisButton extends Trigger {
-    enum Direction {
+    public enum Direction {
         BOTH_WAYS,
         POSITIVE_ONLY,
         NEGATIVE_ONLY

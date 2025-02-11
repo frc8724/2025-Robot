@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -117,6 +118,18 @@ public class Arm extends SubsystemBase {
   public void setElbowPosition(double d) {
     elbowPosMode = true;
     elbowSetpoint = d;
+  }
+
+  public Command setShoulderPositionOffset(double d) {
+    return runOnce(() -> {
+      setShoulderPosition(shoulderSetpoint + d);
+    });
+  }
+
+  public Command setElbowPositionOffset(double d) {
+    return runOnce(() -> {
+      setElbowPosition(elbowSetpoint + d);
+    });
   }
 
   public Command setElbowPositionCmd(double d) {

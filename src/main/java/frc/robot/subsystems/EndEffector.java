@@ -19,9 +19,13 @@ public class EndEffector extends SubsystemBase {
   DigitalInput limitSwitch = new DigitalInput(0);
   boolean intaking;
   double intakeSpeed;
+  Wrist wrist;
+  double wristValue;
+  boolean coralCaptured;
 
   /** Creates a new EndEffector. */
-  public EndEffector() {
+  public EndEffector(Wrist w) {
+    wrist = w;
   }
 
   @Override
@@ -31,17 +35,24 @@ public class EndEffector extends SubsystemBase {
     if (intaking) {
       // if the limit switch is pressed, stop the motor.
       if (!limitSwitch.get()) {
+        coralCaptured = true;
         motorFx.setControl(output.withOutput(0));
       } else { // if the limit switch it not pressed, intake more
+        coralCaptured = false;
         motorFx.setControl(output.withOutput(intakeSpeed));
       }
+
+      SmartDashboard.putBoolean("EndEffector Limit Switch", limitSwitch.get());
     }
 
-    SmartDashboard.putBoolean("EndEffector Limit Switch", limitSwitch.get());
+    if (coralCaptured) {
+      double wristSpeed = wrist.getSpeed();
+      motorFx.setControl(output.withOutput(wristSpeed / 25));
+    }
   }
 
-  public void setSpeed(double d) {
-    this.intaking = d > 0;
+  void setSpeed(double d) {
+    this.intaking = d >= 0;
     intakeSpeed = d;
     motorFx.setControl(output.withOutput(d));
   }
