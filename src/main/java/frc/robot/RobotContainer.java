@@ -193,11 +193,11 @@ public class RobotContainer {
                 // drivebase.driveToPose(
                 // new Pose2d(new Translation2d(4, 4),
                 // Rotation2d.fromDegrees(0))));
-                m_driverStick.Button(1).onTrue(endEffector.setSpeedCmd(.5));
-                m_driverStick.Button(1).onFalse(endEffector.setSpeedCmd(0));
+                // m_driverStick.Button(1).onTrue(endEffector.setSpeedCmd(.5));
+                // m_driverStick.Button(1).onFalse(endEffector.setSpeedCmd(0));
 
-                m_driverStick.Button(2).onTrue(endEffector.setSpeedCmd(-.3));
-                m_driverStick.Button(2).onFalse(endEffector.setSpeedCmd(0));
+                // m_driverStick.Button(2).onTrue(endEffector.setSpeedCmd(-.3));
+                // m_driverStick.Button(2).onFalse(endEffector.setSpeedCmd(0));
 
                 // m_driverStick.Button(3).onTrue(wrist.setPositionCmd(512));
                 // m_driverStick.Button(4).onTrue(wrist.setPositionCmd(0));
@@ -207,49 +207,51 @@ public class RobotContainer {
                 // m_driverStick.Button(4).onTrue(arm.setShoulderPositionCmd((4030 + 256) %
                 // 4096));
 
-                m_driverStick.Button(3).onTrue(
-                                new SequentialCommandGroup(
-                                                wrist.setPositionCmd(225), // wrist
-                                                arm.setElbowPositionCmd(2775), // elbow
-                                                arm.setShoulderPositionCmd(130) // shoulder
-                                ));
-                m_driverStick.Button(4).onTrue(
-                                new SequentialCommandGroup(
-                                                wrist.setPositionCmd(350), // wrist
-                                                arm.setElbowPositionCmd(470), // elbow
-                                                arm.setShoulderPositionCmd(3836) // shoulder
-                                ));
+                // m_driverStick.Button(3).onTrue(
+                // new SequentialCommandGroup(
+                // wrist.setPositionCmd(225), // wrist
+                // arm.setElbowPositionCmd(2775), // elbow
+                // arm.setShoulderPositionCmd(130) // shoulder
+                // ));
+                // m_driverStick.Button(4).onTrue(
+                // new SequentialCommandGroup(
+                // wrist.setPositionCmd(350), // wrist
+                // arm.setElbowPositionCmd(470), // elbow
+                // arm.setShoulderPositionCmd(3836) // shoulder
+                // ));
 
-                m_driverStick.Button(5).onTrue(wrist.zeroCmd());
+                // m_driverStick.Button(5).onTrue(wrist.zeroCmd());
 
-                m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
-                m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
-                m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
-                m_driverStick.Button(12).onFalse(arm.setShoulderSpeedCmd(0));
+                // m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
+                // m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
+                // m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
+                // m_driverStick.Button(12).onFalse(arm.setShoulderSpeedCmd(0));
 
-                m_driverStick.Button(9).onTrue(arm.setElbowSpeedCmd(-.2));
-                m_driverStick.Button(9).onFalse(arm.setElbowSpeedCmd(0));
-                m_driverStick.Button(10).onTrue(arm.setElbowSpeedCmd(.2));
-                m_driverStick.Button(10).onFalse(arm.setElbowSpeedCmd(0));
+                // m_driverStick.Button(9).onTrue(arm.setElbowSpeedCmd(-.2));
+                // m_driverStick.Button(9).onFalse(arm.setElbowSpeedCmd(0));
+                // m_driverStick.Button(10).onTrue(arm.setElbowSpeedCmd(.2));
+                // m_driverStick.Button(10).onFalse(arm.setElbowSpeedCmd(0));
 
-                m_driverStick.Button(7).onTrue(wrist.setSpeedCmd(-.2));
-                m_driverStick.Button(7).onFalse(wrist.setSpeedCmd(0));
-                m_driverStick.Button(8).onTrue(wrist.setSpeedCmd(.2));
-                m_driverStick.Button(8).onFalse(wrist.setSpeedCmd(0));
-
-                // m_driverStick.Button(6).whileTrue(Commands.runOnce(drivebase::lock,
-                // drivebase).repeatedly());
-                m_driverStick.Button(7).onTrue(Commands.none());
-                // }
+                // m_driverStick.Button(7).onTrue(wrist.setSpeedCmd(-.2));
+                // m_driverStick.Button(7).onFalse(wrist.setSpeedCmd(0));
+                // m_driverStick.Button(8).onTrue(wrist.setSpeedCmd(.2));
+                // m_driverStick.Button(8).onFalse(wrist.setSpeedCmd(0));
 
                 // Stow - dpad down
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(350, 470, 3836));
+                m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(endEffector.setSpeedCmd(0.0));
                 // Capture Algae - dpad-left
                 m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(350, 470, 3836));
+                m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(endEffector.setSpeedCmd(0.4));
+                m_operatorPad.PovButton(JoystickPOVButton.WEST).onFalse(endEffector.setSpeedCmd(0.0));
                 // Hold Algae - dpad right
                 m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(ArmPositionCmd(350, 470, 3836));
+                m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(endEffector.setSpeedCmd(0.4));
+                m_operatorPad.PovButton(JoystickPOVButton.EAST).onFalse(endEffector.setSpeedCmd(0.0));
                 // Score Algae - dpad up
                 m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(ArmPositionCmd(350, 470, 3836));
+                m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(endEffector.setSpeedCmd(-0.4));
+                m_operatorPad.PovButton(JoystickPOVButton.NORTH).onFalse(endEffector.setSpeedCmd(0.0));
 
                 // Score L1 - Green
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
