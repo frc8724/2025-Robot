@@ -156,19 +156,28 @@ public class Arm extends SubsystemBase {
     });
   }
 
+  public Command setPositionCmd(double elbowPos, double shoulderPos) {
+    return runOnce(() -> {
+      setShoulderPosition(shoulderPos);
+      setElbowPosition(elbowPos);
+    });
+  }
+
   double convertRadianToEncoder(double x, double offset) {
     return x / (2 * Math.PI) * 4095 + offset;
   }
 
-  public Command setArmPositionCmd(double x, double y) {
-    var angles = InverseKinematics.getPreferredArmAngles(x, y);
+  // public Command setArmPositionCmd(double x, double y) {
+  // var angles = InverseKinematics.getPreferredArmAngles(x, y);
 
-    double elbowEncoderCounts = convertRadianToEncoder(angles.elbowAngleRads, ElbowEncoderOffset);
-    double shoulderEncoderCounts = convertRadianToEncoder(angles.shoulderAngleRads, ShoulderEncoderOffset);
+  // double elbowEncoderCounts = convertRadianToEncoder(angles.elbowAngleRads,
+  // ElbowEncoderOffset);
+  // double shoulderEncoderCounts =
+  // convertRadianToEncoder(angles.shoulderAngleRads, ShoulderEncoderOffset);
 
-    return runOnce(() -> {
-      setShoulderPosition(shoulderEncoderCounts);
-      setElbowPosition(elbowEncoderCounts);
-    });
-  }
+  // return runOnce(() -> {
+  // setShoulderPosition(shoulderEncoderCounts);
+  // setElbowPosition(elbowEncoderCounts);
+  // });
+  // }
 }

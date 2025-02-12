@@ -25,7 +25,7 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
-    public static final double DEADBAND = 0.1;
+    public static final double DEADBAND = 0.4;
   }
 
   public static class DriveConstants {
@@ -56,24 +56,6 @@ public final class Constants {
     public static final boolean kRearLeftTurningEncoderReversed = true;
     public static final boolean kFrontRightTurningEncoderReversed = true;
     public static final boolean kRearRightTurningEncoderReversed = true;
-
-    public static final boolean kFrontLeftDriveEncoderReversed = false;
-    public static final boolean kRearLeftDriveEncoderReversed = false;
-    public static final boolean kFrontRightDriveEncoderReversed = true;
-    public static final boolean kRearRightDriveEncoderReversed = true;
-
-    public static final int FrontLeftMag = 3;
-    public static final int RearLeftMag = 1;
-    public static final int FrontRightMag = 0;
-    public static final int RearRightMag = 2;
-
-    public static final int ninety_degrees_in_ticks = 0;
-    public static final int one_eighty_degrees_in_ticks = 2048;
-
-    public static final int FrontLeftMagZero = 2794;
-    public static final int RearLeftMagZero = 2735;
-    public static final int FrontRightMagZero = 435;
-    public static final int RearRightMagZero = 330;
 
     // If you call DriveSubsystem.drive() with a different period make sure to
     // update this.

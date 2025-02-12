@@ -18,7 +18,7 @@ public class JoystickAxisButton extends Trigger {
         NEGATIVE_ONLY
     }
 
-    private static final double AXIS_THRESHOLD = 0.2;
+    private static final double AXIS_THRESHOLD = 0.5;
 
     static double getAxis(Joystick stick, Joystick.AxisType axis) {
         switch (axis) {

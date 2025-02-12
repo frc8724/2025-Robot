@@ -23,7 +23,7 @@ public class Wrist extends SubsystemBase {
   DutyCycleOut output = new DutyCycleOut(0);
   Encoder encoder = new Encoder(1, 2);
 
-  PIDController pid = new PIDController(0.01, 0, 0);
+  PIDController pid = new PIDController(0.004, 0, 0);
   boolean positionMode;
   double positionSetpoint;
 
@@ -33,7 +33,7 @@ public class Wrist extends SubsystemBase {
 
   /** Creates a new Wrist. */
   public Wrist() {
-    pid.setTolerance(5, 10);
+    pid.setTolerance(15, 10);
 
     var config = new TalonFXConfiguration();
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -95,6 +95,7 @@ public class Wrist extends SubsystemBase {
 
   public Command zeroCmd() {
     return runOnce(() -> {
+      setSpeed(0);
       encoder.reset();
     });
   }
