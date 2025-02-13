@@ -71,6 +71,21 @@ public class RobotContainer {
          * Converts driver input into a field-relative ChassisSpeeds that is controlled
          * by angular velocity.
          */
+        // SwerveInputStream driveAngularVelocity =
+        // SwerveInputStream.of(drivebase.getSwerveDrive(),
+        // () -> {
+        // double speedMod = m_driverStick.Button(1).getAsBoolean() ? 1.0 : .25;
+        // return m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble() *
+        // speedMod;
+        // },
+        // () -> {
+        // double speedMod = m_driverStick.Button(1).getAsBoolean() ? 1.0 : .25;
+        // return m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble() *
+        // speedMod;
+        // })
+        // .withControllerRotationAxis(
+        // () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .6)
+        // .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.2).allianceRelativeControl(true);
         SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
@@ -239,7 +254,7 @@ public class RobotContainer {
                 m_driverStick.Button(8).onFalse(wrist.setSpeedCmd(0));
 
                 // Stow - dpad down
-                m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, 2240, 43));
+                m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1790, 115));
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(endEffector.setSpeedCmd(0.0));
                 // Capture Algae - dpad-left
                 m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(350, 470, 3836));
@@ -255,13 +270,13 @@ public class RobotContainer {
                 m_operatorPad.PovButton(JoystickPOVButton.NORTH).onFalse(endEffector.setSpeedCmd(0.0));
 
                 // Score L1 - Green
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(-687, 1300, 3680));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(-581, 1410, -420));
                 // Gather from HP - Blue
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(-690, 1075, 3680));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(-780, 1125, -240));
                 // Score L2 - Red
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_B_BUTTON).onTrue(ArmPositionCmd(-360, 911, 3740));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_B_BUTTON).onTrue(ArmPositionCmd(-290, 1044, -456));
                 // Score L3 - Yellow
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-273, 465, 3874));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-300, 671, -330));
 
                 // Intake - Right Trigger Top
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onTrue(endEffector.setSpeedCmd(.5));
@@ -316,11 +331,13 @@ public class RobotContainer {
         }
 
         private Command ArmPositionCmd(double wristPos, double elbowPos, double shoulderPos) {
-                return new ParallelCommandGroup(
-                                wrist.setPositionCmd(wristPos), // wrist
-                                arm.setPositionCmd(elbowPos, shoulderPos) // elbow
-                // arm.setShoulderPositionCmd(shoulderPos) // shoulder
-                );
+                return new SequentialCommandGroup(
+                                wrist.setPositionCmd(-465), // wrist straight out of upper arm
+                                arm.setElbowAbsolutePositionCmd(200),
+                                arm.isAtPositionCmd(),
+                                arm.setPositionCmd(elbowPos, shoulderPos), // elbow
+                                arm.isAtPositionCmd(),
+                                wrist.setPositionCmd(wristPos));
         }
 
         /**
@@ -336,8 +353,6 @@ public class RobotContainer {
                 // new SystemStopAllMotors(),
                 // m_auto.getAutoCommand());
                 // new PathPlannerAuto("StartCenterShortShoot3Left"));
-                return new Command() {
-
-                };
+                return drivebase.driveCmd();
         }
 }

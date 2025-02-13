@@ -715,4 +715,10 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
   }
+
+  public Command driveCmd() {
+    return runOnce(() -> {
+      swerveDrive.drive(new ChassisSpeeds(1.0, 0.0, 0.0));
+    });
+  }
 }

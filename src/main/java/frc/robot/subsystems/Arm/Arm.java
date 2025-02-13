@@ -7,17 +7,14 @@ package frc.robot.subsystems.Arm;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -26,8 +23,8 @@ public class Arm extends SubsystemBase {
   TalonFX shoulderRight = new TalonFX(Constants.DriveConstants.kShoulderRightMotor);
   TalonFX elbow = new TalonFX(Constants.DriveConstants.kElbowMotor);
 
-  AnalogInput shoulderEncoder = new AnalogInput(5);
-  AnalogInput elbowEncoder = new AnalogInput(4);
+  ThirftyAbsMagneticEncoder shoulderEncoder = new ThirftyAbsMagneticEncoder(5, -40);
+  ThirftyAbsMagneticEncoder elbowEncoder = new ThirftyAbsMagneticEncoder(4, -84);
 
   DutyCycleOut output = new DutyCycleOut(0);
 
@@ -52,8 +49,8 @@ public class Arm extends SubsystemBase {
     elbowPid.setTolerance(30, 100);
     shoulderPid.setTolerance(30, 100);
 
-    elbowPid.enableContinuousInput(0, 4095);
-    shoulderPid.enableContinuousInput(0, 4095);
+    // elbowPid.enableContinuousInput(0, 4095);
+    // shoulderPid.enableContinuousInput(0, 4095);
 
     shoulderLeft.setControl(new Follower(Constants.DriveConstants.kShoulderRightMotor, true));
 
@@ -138,6 +135,12 @@ public class Arm extends SubsystemBase {
     });
   }
 
+  public Command setElbowAbsolutePositionCmd(double d) {
+    return runOnce(() -> {
+      setElbowPosition(d - shoulderEncoder.getValue());
+    });
+  }
+
   public void setShoulderPosition(double d) {
     shoulderPosMode = true;
 
@@ -165,6 +168,18 @@ public class Arm extends SubsystemBase {
 
   double convertRadianToEncoder(double x, double offset) {
     return x / (2 * Math.PI) * 4095 + offset;
+  }
+
+  public boolean elbowIsAtSetpoint() {
+    return Math.abs(elbowSetpoint - elbowEncoder.getValue()) < 50;
+  }
+
+  public boolean shoulderIsAtSetpoint() {
+    return Math.abs(elbowSetpoint - elbowEncoder.getValue()) < 20;
+  }
+
+  public Command isAtPositionCmd() {
+    return new ArmIsAtPosition(this);
   }
 
   // public Command setArmPositionCmd(double x, double y) {
