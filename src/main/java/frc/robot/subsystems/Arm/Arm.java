@@ -23,7 +23,7 @@ public class Arm extends SubsystemBase {
   TalonFX shoulderRight = new TalonFX(Constants.DriveConstants.kShoulderRightMotor);
   TalonFX elbow = new TalonFX(Constants.DriveConstants.kElbowMotor);
 
-  ThirftyAbsMagneticEncoder shoulderEncoder = new ThirftyAbsMagneticEncoder(5, -40);
+  ThirftyAbsMagneticEncoder shoulderEncoder = new ThirftyAbsMagneticEncoder(5, -1050);
   ThirftyAbsMagneticEncoder elbowEncoder = new ThirftyAbsMagneticEncoder(4, -84);
 
   DutyCycleOut output = new DutyCycleOut(0);
@@ -176,6 +176,10 @@ public class Arm extends SubsystemBase {
 
   public boolean shoulderIsAtSetpoint() {
     return Math.abs(elbowSetpoint - elbowEncoder.getValue()) < 20;
+  }
+
+  public double getShoulderSetpoint() {
+    return shoulderSetpoint;
   }
 
   public Command isAtPositionCmd() {

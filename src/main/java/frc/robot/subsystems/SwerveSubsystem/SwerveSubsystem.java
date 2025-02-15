@@ -716,9 +716,9 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveDrive;
   }
 
-  public Command driveCmd() {
-    return runOnce(() -> {
-      swerveDrive.drive(new ChassisSpeeds(1.0, 0.0, 0.0));
+  public Command driveCmd(double x) {
+    return run(() -> {
+      swerveDrive.drive(new ChassisSpeeds(x, 0.0, 0.0));
     });
   }
 }

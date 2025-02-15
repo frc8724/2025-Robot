@@ -55,6 +55,7 @@ public class Wrist extends SubsystemBase {
 
     SmartDashboard.putNumber("Wrist Encoder", encoder.get());
     SmartDashboard.putNumber("Wrist Position Power", wristPower);
+    SmartDashboard.putNumber("Wrist Position Setpoint", positionSetpoint);
   }
 
   public double get() {

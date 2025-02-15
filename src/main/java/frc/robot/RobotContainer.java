@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -40,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.io.File;
 import java.lang.management.MemoryType;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -90,7 +92,7 @@ public class RobotContainer {
                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
                         .withControllerRotationAxis(
-                                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .6)
+                                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .5)
                         .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.2).allianceRelativeControl(true);
 
         /**
@@ -257,17 +259,18 @@ public class RobotContainer {
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1790, 115));
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(endEffector.setSpeedCmd(0.0));
                 // Capture Algae - dpad-left
-                m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(350, 470, 3836));
-                m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(endEffector.setSpeedCmd(0.4));
-                m_operatorPad.PovButton(JoystickPOVButton.WEST).onFalse(endEffector.setSpeedCmd(0.0));
+                m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(-444, -1438, 39));
+                // m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(endEffector.setSpeedCmd(0.4));
+                // m_operatorPad.PovButton(JoystickPOVButton.WEST).onFalse(endEffector.setSpeedCmd(0.0));
                 // Hold Algae - dpad right
-                m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(ArmPositionCmd(350, 470, 3836));
-                m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(endEffector.setSpeedCmd(0.4));
-                m_operatorPad.PovButton(JoystickPOVButton.EAST).onFalse(endEffector.setSpeedCmd(0.0));
+                // m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(ArmPositionCmd(350,
+                // 470, 3836));
+                // m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(endEffector.setSpeedCmd(0.4));
+                // m_operatorPad.PovButton(JoystickPOVButton.EAST).onFalse(endEffector.setSpeedCmd(0.0));
                 // Score Algae - dpad up
-                m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(ArmPositionCmd(350, 470, 3836));
-                m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(endEffector.setSpeedCmd(-0.4));
-                m_operatorPad.PovButton(JoystickPOVButton.NORTH).onFalse(endEffector.setSpeedCmd(0.0));
+                m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(ArmPositionCmd(-444, -1200, 39));
+                m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(endEffector.setSpeedCmd(0.4));
+                // m_operatorPad.PovButton(JoystickPOVButton.NORTH).onFalse(endEffector.setSpeedCmd(0.0));
 
                 // Score L1 - Green
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(-581, 1410, -420));
@@ -279,21 +282,23 @@ public class RobotContainer {
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-300, 671, -330));
 
                 // Intake - Right Trigger Top
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onTrue(endEffector.setSpeedCmd(.5));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onTrue(endEffector.setSpeedCmd(.3));
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onFalse(endEffector.setSpeedCmd(0.0));
                 // Out-take - Right Trigger Bottom
                 m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_TRIGGER, Direction.POSITIVE_ONLY)
-                                .onTrue(endEffector.setSpeedCmd(-0.5));
+                                .onTrue(endEffector.setSpeedCmd(-0.8));
                 m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_TRIGGER, Direction.POSITIVE_ONLY)
                                 .onFalse(endEffector.setSpeedCmd(0.0));
 
                 // Knock Off Algae L2 - back
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON).onFalse(ArmPositionCmd(350, 470, 3836));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON).onTrue(ArmPositionCmd(-855, 1580, -335));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON)
+                                .onFalse(ArmPositionCmd(-855, 1380, -335));
 
                 // Knock off algae L3 - start
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON).onTrue(ArmPositionCmd(350, 470, 3836));
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON).onFalse(ArmPositionCmd(350, 470, 3836));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON).onTrue(ArmPositionCmd(-400, 950, -125));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON)
+                                .onFalse(ArmPositionCmd(-400, 720, -125));
 
                 // Manual Elbow up-down - left y-axis up/down
                 m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.POSITIVE_ONLY)
@@ -333,11 +338,28 @@ public class RobotContainer {
         private Command ArmPositionCmd(double wristPos, double elbowPos, double shoulderPos) {
                 return new SequentialCommandGroup(
                                 wrist.setPositionCmd(-465), // wrist straight out of upper arm
-                                arm.setElbowAbsolutePositionCmd(200),
-                                arm.isAtPositionCmd(),
+                                BringArmToVerticalIfNeeded(shoulderPos),
                                 arm.setPositionCmd(elbowPos, shoulderPos), // elbow
                                 arm.isAtPositionCmd(),
                                 wrist.setPositionCmd(wristPos));
+        }
+
+        private Command BringArmToVerticalIfNeeded(double newSetPoint) {
+                return new SelectCommand<Boolean>(
+                                Map.ofEntries(
+                                                Map.entry(false, new WaitCommand(0.1)),
+                                                Map.entry(true, new SequentialCommandGroup(
+                                                                arm.setPositionCmd(0, 0),
+                                                                arm.isAtPositionCmd()))),
+                                () -> {
+                                        double currentSetPoint = arm.getShoulderSetpoint();
+                                        boolean startingIsCloseToVert = Math.abs(currentSetPoint) < 200;
+                                        boolean endingIsCloseToVert = Math.abs(newSetPoint) < 200;
+
+                                        return (newSetPoint * currentSetPoint) < 0 && !startingIsCloseToVert
+                                                        && !endingIsCloseToVert;
+                                });
+
         }
 
         /**
@@ -353,6 +375,9 @@ public class RobotContainer {
                 // new SystemStopAllMotors(),
                 // m_auto.getAutoCommand());
                 // new PathPlannerAuto("StartCenterShortShoot3Left"));
-                return drivebase.driveCmd();
+                return new SequentialCommandGroup(
+                                drivebase.driveCmd(-1.0).withTimeout(2.0),
+                                // drivebase.driveCmd(-1.0),
+                                drivebase.driveCmd(0.0).withTimeout(0.1));
         }
 }
