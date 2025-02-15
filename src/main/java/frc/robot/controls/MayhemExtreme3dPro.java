@@ -10,7 +10,7 @@ public class MayhemExtreme3dPro {
     Joystick m_joystick;
 
     public enum Axis {
-        X(0), Y(1), Z(2);
+        X(0), Y(1), Z(2), Flapper(3);
 
         private final int value;
 

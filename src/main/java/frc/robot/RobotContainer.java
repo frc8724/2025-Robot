@@ -89,8 +89,18 @@ public class RobotContainer {
         // () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .6)
         // .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.2).allianceRelativeControl(true);
         SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble(),
-                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
+                        () -> {
+                                var multiplier = m_driverStick.Axis(MayhemExtreme3dPro.Axis.Flapper).getAsDouble();
+                                multiplier = ((multiplier * -1) + 1.0) / 2; // rescale from [-1,1] to [0,1]
+
+                                return m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble() * multiplier;
+                        },
+                        () -> {
+                                var multiplier = m_driverStick.Axis(MayhemExtreme3dPro.Axis.Flapper).getAsDouble();
+                                multiplier = ((multiplier * -1) + 1.0) / 2; // rescale from [-1,1] to [0,1]
+
+                                return m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble() * multiplier;
+                        })
                         .withControllerRotationAxis(
                                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .5)
                         .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.3).allianceRelativeControl(true);
