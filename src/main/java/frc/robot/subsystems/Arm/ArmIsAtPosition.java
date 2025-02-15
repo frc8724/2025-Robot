@@ -37,6 +37,6 @@ public class ArmIsAtPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.elbowIsAtSetpoint() && arm.shoulderIsAtSetpoint();
+    return arm.elbowIsAtSetpoint();// && arm.shoulderIsAtSetpoint();
   }
 }

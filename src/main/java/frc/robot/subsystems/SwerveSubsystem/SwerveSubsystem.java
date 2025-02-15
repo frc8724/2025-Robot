@@ -555,6 +555,12 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.zeroGyro();
   }
 
+  public Command zerCommand(){
+    return runOnce(() ->{
+      zeroGyro();
+    });
+  }
+
   /**
    * Checks if the alliance is red, defaults to false if alliance isn't available.
    *

@@ -79,7 +79,7 @@ public class Arm extends SubsystemBase {
     }
 
     if (shoulderPosMode) {
-      shoulderRight.setControl(output.withOutput(shoulderPower));
+      // shoulderRight.setControl(output.withOutput(shoulderPower));
     }
 
     SmartDashboard.putNumber("Shoulder Encoder", shoulderEncoder.getValue());

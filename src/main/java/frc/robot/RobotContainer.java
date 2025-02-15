@@ -93,7 +93,7 @@ public class RobotContainer {
                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble())
                         .withControllerRotationAxis(
                                         () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .5)
-                        .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.2).allianceRelativeControl(true);
+                        .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.3).allianceRelativeControl(true);
 
         /**
          * Clone the angular velocity input stream and converts it to a fieldRelative
@@ -255,6 +255,8 @@ public class RobotContainer {
                 m_driverStick.Button(8).onTrue(wrist.setSpeedCmd(.2));
                 m_driverStick.Button(8).onFalse(wrist.setSpeedCmd(0));
 
+                m_driverStick.Button(6).onTrue(drivebase.zerCommand());
+
                 // Stow - dpad down
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1790, 115));
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(endEffector.setSpeedCmd(0.0));
@@ -301,20 +303,30 @@ public class RobotContainer {
                                 .onFalse(ArmPositionCmd(-400, 720, -125));
 
                 // Manual Elbow up-down - left y-axis up/down
-                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.POSITIVE_ONLY)
-                                .onTrue(arm.setElbowPositionOffset(20));
-                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.NEGATIVE_ONLY)
-                                .onTrue(arm.setElbowPositionOffset(-20));
-                // Manual Shoulder in-out - right x-axis left/right
-                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_X_AXIS, Direction.POSITIVE_ONLY)
-                                .onTrue(arm.setShoulderPositionOffset(20));
-                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_X_AXIS, Direction.NEGATIVE_ONLY)
-                                .onTrue(arm.setShoulderPositionOffset(-20));
-                // Manual wrist up-down - right y-axis up/down
                 m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS, Direction.POSITIVE_ONLY)
-                                .onTrue(wrist.setPositionOffset(20));
+                                .onTrue(arm.setElbowPositionOffset(20));
                 m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS, Direction.NEGATIVE_ONLY)
-                                .onTrue(wrist.setPositionOffset(-20));
+                                .onTrue(arm.setElbowPositionOffset(-20));
+
+                // Manual Shoulder in-out - right x-axis left/right
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.POSITIVE_ONLY)
+                                .onTrue(arm.setShoulderSpeedCmd(-.2));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.POSITIVE_ONLY)
+                                .onFalse(arm.setShoulderSpeedCmd(0.0));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.NEGATIVE_ONLY)
+                                .onTrue(arm.setShoulderSpeedCmd(.2));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.NEGATIVE_ONLY)
+                                .onFalse(arm.setShoulderSpeedCmd(0.0));
+
+                // Manual wrist up-down - right y-axis up/down
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_X_AXIS, Direction.POSITIVE_ONLY)
+                                .onTrue(wrist.setSpeedCmd(.2));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_X_AXIS, Direction.POSITIVE_ONLY)
+                                .onFalse(wrist.setSpeedCmd(0.0));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_X_AXIS, Direction.NEGATIVE_ONLY)
+                                .onTrue(wrist.setSpeedCmd(-.20));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_X_AXIS, Direction.NEGATIVE_ONLY)
+                                .onFalse(wrist.setSpeedCmd(00));
 
                 // Zero Wrist
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_LEFT_BUTTON).onTrue(wrist.zeroCmd());
