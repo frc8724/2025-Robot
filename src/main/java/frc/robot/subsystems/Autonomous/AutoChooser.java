@@ -27,6 +27,11 @@ public class AutoChooser extends SubsystemBase {
 
   public void addAuto(Command cmd) {
     String name = cmd.getClass().getSimpleName();
+
+    addAuto(name, cmd);
+  }
+
+  public void addAuto(String name, Command cmd) {
     autoChooser.addOption(name, cmd);
   }
 

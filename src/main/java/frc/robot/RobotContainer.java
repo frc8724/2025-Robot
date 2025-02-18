@@ -157,6 +157,7 @@ public class RobotContainer {
 
                 m_auto.addAuto(new WaitCommand(5));
                 m_auto.addAuto(new AutoDriveOut());
+                m_auto.addAuto("New Auto", new PathPlannerAuto("New Auto"));
         }
 
         /**
@@ -227,8 +228,8 @@ public class RobotContainer {
                 // m_driverStick.Button(2).onTrue(endEffector.setSpeedCmd(-.3));
                 // m_driverStick.Button(2).onFalse(endEffector.setSpeedCmd(0));
 
-                m_driverStick.Button(3).onTrue(wrist.setPositionCmd(512));
-                m_driverStick.Button(4).onTrue(wrist.setPositionCmd(0));
+                // m_driverStick.Button(3).onTrue(wrist.setPositionCmd(512));
+                // m_driverStick.Button(4).onTrue(wrist.setPositionCmd(0));
                 // m_driverStick.Button(3).onTrue(arm.setElbowPositionCmd(4011));
                 // m_driverStick.Button(4).onTrue(arm.setElbowPositionCmd((4011 + 512) % 4096));
                 // m_driverStick.Button(3).onTrue(arm.setShoulderPositionCmd(4030));
@@ -390,16 +391,6 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-
-                // An example command will be run in autonomous
-                // return new PathPlannerAuto("New Auto");
-                // return new SequentialCommandGroup(
-                // new SystemStopAllMotors(),
-                // m_auto.getAutoCommand());
-                // new PathPlannerAuto("StartCenterShortShoot3Left"));
-                return new SequentialCommandGroup(
-                                drivebase.driveCmd(-1.0).withTimeout(2.0),
-                                // drivebase.driveCmd(-1.0),
-                                drivebase.driveCmd(0.0).withTimeout(0.1));
+                return m_auto.getAutoCommand();
         }
 }
