@@ -13,23 +13,25 @@ import com.ctre.phoenix6.controls.Follower;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class Arm extends SubsystemBase {
   TalonFX shoulderLeft = new TalonFX(Constants.DriveConstants.kShoulderLeftMotor);
   TalonFX shoulderRight = new TalonFX(Constants.DriveConstants.kShoulderRightMotor);
   TalonFX elbow = new TalonFX(Constants.DriveConstants.kElbowMotor);
 
-  ThirftyAbsMagneticEncoder shoulderEncoder = new ThirftyAbsMagneticEncoder(5, -1050);
+  Encoder shoulderEncoder = new Encoder(3, 4);
   ThirftyAbsMagneticEncoder elbowEncoder = new ThirftyAbsMagneticEncoder(4, -84);
 
   DutyCycleOut output = new DutyCycleOut(0);
 
   PIDController elbowPid = new PIDController(0.0009, 0, 0);
-  PIDController shoulderPid = new PIDController(0.001, 0, 0);
+  PIDController shoulderPid = new PIDController(0.002, 0, 0);
 
   boolean elbowPosMode = false;
   boolean shoulderPosMode = false;
@@ -63,13 +65,14 @@ public class Arm extends SubsystemBase {
     elbowConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     elbowConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     elbow.getConfigurator().apply(elbowConfig);
+    shoulderEncoder.setReverseDirection(true);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     double elbowPower = elbowPid.calculate(elbowEncoder.getValue(), elbowSetpoint);
-    double shoulderPower = shoulderPid.calculate(shoulderEncoder.getValue(), shoulderSetpoint);
+    double shoulderPower = shoulderPid.calculate(shoulderEncoder.get(), shoulderSetpoint);
 
     elbowPower = MathUtil.clamp(elbowPower, -.5, .5);
     shoulderPower = MathUtil.clamp(shoulderPower, -.5, .5);
@@ -79,10 +82,10 @@ public class Arm extends SubsystemBase {
     }
 
     if (shoulderPosMode) {
-      // shoulderRight.setControl(output.withOutput(shoulderPower));
+      shoulderRight.setControl(output.withOutput(shoulderPower));
     }
 
-    SmartDashboard.putNumber("Shoulder Encoder", shoulderEncoder.getValue());
+    SmartDashboard.putNumber("Shoulder Encoder", shoulderEncoder.get());
     SmartDashboard.putNumber("Elbow Encoder", elbowEncoder.getValue());
     SmartDashboard.putNumber("Elbow Position Power", elbowPower);
     SmartDashboard.putNumber("Elbow Position Setpoint", elbowSetpoint);
@@ -137,18 +140,18 @@ public class Arm extends SubsystemBase {
 
   public Command setElbowAbsolutePositionCmd(double d) {
     return runOnce(() -> {
-      setElbowPosition(d - shoulderEncoder.getValue());
+      setElbowPosition(d - shoulderEncoder.get());
     });
   }
 
   public void setShoulderPosition(double d) {
     shoulderPosMode = true;
 
-    if (d > 130 && d < 2048) {
-      d = 130;
+    if (d > 0) {
+      d = 0;
     }
-    if (d < 3800 && d > 2048) {
-      d = 3800;
+    if (d < -300) {
+      d = -300;
     }
     shoulderSetpoint = d;
   }
@@ -176,6 +179,12 @@ public class Arm extends SubsystemBase {
 
   public boolean shoulderIsAtSetpoint() {
     return Math.abs(elbowSetpoint - elbowEncoder.getValue()) < 20;
+  }
+
+  public Command shoulderZeroCmd() {
+    return runOnce(() -> {
+      shoulderEncoder.reset();
+    });
   }
 
   public double getShoulderSetpoint() {

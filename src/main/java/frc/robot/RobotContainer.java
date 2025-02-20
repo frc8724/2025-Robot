@@ -93,17 +93,17 @@ public class RobotContainer {
                                 var multiplier = m_driverStick.Axis(MayhemExtreme3dPro.Axis.Flapper).getAsDouble();
                                 multiplier = ((multiplier * -1) + 1.0) / 2; // rescale from [-1,1] to [0,1]
 
-                                return m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble() * multiplier;
+                                return -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble() * multiplier;
                         },
                         () -> {
                                 var multiplier = m_driverStick.Axis(MayhemExtreme3dPro.Axis.Flapper).getAsDouble();
                                 multiplier = ((multiplier * -1) + 1.0) / 2; // rescale from [-1,1] to [0,1]
 
-                                return m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble() * multiplier;
+                                return -m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble() * multiplier;
                         })
                         .withControllerRotationAxis(
-                                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .5)
-                        .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.3).allianceRelativeControl(true);
+                                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .8)
+                        .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.8).allianceRelativeControl(false);
 
         /**
          * Clone the angular velocity input stream and converts it to a fieldRelative
@@ -158,6 +158,9 @@ public class RobotContainer {
                 m_auto.addAuto(new WaitCommand(5));
                 m_auto.addAuto(new AutoDriveOut());
                 m_auto.addAuto("New Auto", new PathPlannerAuto("New Auto"));
+                m_auto.addAuto("drive forward", new PathPlannerAuto("drive"));
+                m_auto.addAuto("start left l1 l1", new PathPlannerAuto("start left l1 l1"));
+
         }
 
         /**
@@ -251,10 +254,12 @@ public class RobotContainer {
 
                 // m_driverStick.Button(5).onTrue(wrist.zeroCmd());
 
-                m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
-                m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
-                m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
-                m_driverStick.Button(12).onFalse(arm.setShoulderSpeedCmd(0));
+                // m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
+                // m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
+                // m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
+                // m_driverStick.Button(12).onFalse(arm.setShoulderSpeedCmd(0));
+                m_driverStick.Button(11).onTrue(arm.setShoulderPositionCmd(-278));
+                m_driverStick.Button(12).onTrue(arm.setShoulderPositionCmd(0));
 
                 m_driverStick.Button(9).onTrue(arm.setElbowSpeedCmd(-.2));
                 m_driverStick.Button(9).onFalse(arm.setElbowSpeedCmd(0));
@@ -267,9 +272,10 @@ public class RobotContainer {
                 m_driverStick.Button(8).onFalse(wrist.setSpeedCmd(0));
 
                 m_driverStick.Button(6).onTrue(drivebase.zerCommand());
+                m_driverStick.Button(5).onTrue(arm.shoulderZeroCmd());
 
                 // Stow - dpad down
-                m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1790, 115));
+                m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1764, 0));
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(endEffector.setSpeedCmd(0.0));
                 // Capture Algae - dpad-left
                 m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(-444, -1438, 39));
@@ -286,13 +292,13 @@ public class RobotContainer {
                 // m_operatorPad.PovButton(JoystickPOVButton.NORTH).onFalse(endEffector.setSpeedCmd(0.0));
 
                 // Score L1 - Green
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(-581, 1410, -420));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(-531, 1380, -278));
                 // Gather from HP - Blue
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(-780, 1125, -240));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(-693, 1103, -219));
                 // Score L2 - Red
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_B_BUTTON).onTrue(ArmPositionCmd(-290, 1044, -456));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_B_BUTTON).onTrue(ArmPositionCmd(-471, 1109, -215));
                 // Score L3 - Yellow
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-300, 671, -330));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-287, 495, -117));
 
                 // Intake - Right Trigger Top
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onTrue(endEffector.setSpeedCmd(.3));
