@@ -46,6 +46,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import frc.robot.controls.JoystickAxisButton.Direction;
 
@@ -102,7 +103,7 @@ public class RobotContainer {
                                 return -m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble() * multiplier;
                         })
                         .withControllerRotationAxis(
-                                        () -> m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .8)
+                                        () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .8)
                         .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.8).allianceRelativeControl(false);
 
         /**
@@ -158,7 +159,7 @@ public class RobotContainer {
                 m_auto.addAuto(new WaitCommand(5));
                 m_auto.addAuto(new AutoDriveOut());
                 m_auto.addAuto("New Auto", new PathPlannerAuto("New Auto"));
-                m_auto.addAuto("drive forward", new PathPlannerAuto("drive"));
+                m_auto.addAuto("drive", new PathPlannerAuto("drive"));
                 m_auto.addAuto("start left l1 l1", new PathPlannerAuto("start left l1 l1"));
 
         }
@@ -254,12 +255,12 @@ public class RobotContainer {
 
                 // m_driverStick.Button(5).onTrue(wrist.zeroCmd());
 
-                // m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
-                // m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
-                // m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
-                // m_driverStick.Button(12).onFalse(arm.setShoulderSpeedCmd(0));
-                m_driverStick.Button(11).onTrue(arm.setShoulderPositionCmd(-278));
-                m_driverStick.Button(12).onTrue(arm.setShoulderPositionCmd(0));
+                m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
+                m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
+                m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
+                m_driverStick.Button(12).onFalse(arm.setShoulderSpeedCmd(0));
+                // m_driverStick.Button(11).onTrue(arm.setShoulderPositionCmd(-278));
+                // m_driverStick.Button(12).onTrue(arm.setShoulderPositionCmd(0));
 
                 m_driverStick.Button(9).onTrue(arm.setElbowSpeedCmd(-.2));
                 m_driverStick.Button(9).onFalse(arm.setElbowSpeedCmd(0));
@@ -362,6 +363,7 @@ public class RobotContainer {
         }
 
         private void configureNamedCommands() {
+                NamedCommands.registerCommand("AutoL1", ArmPositionCmd(-494, -1388, 0));
         }
 
         private Command ArmPositionCmd(double wristPos, double elbowPos, double shoulderPos) {

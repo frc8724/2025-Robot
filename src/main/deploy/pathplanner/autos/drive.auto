@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "AutoL1"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "DriveFwd"
+            "pathName": "Drive Fwd"
           }
         }
       ]
