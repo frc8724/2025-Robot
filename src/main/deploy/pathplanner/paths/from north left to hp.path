@@ -8,36 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.499000000000001,
-        "y": 5.936
+        "x": 5.0992500000000005,
+        "y": 6.053
       },
       "isLocked": false,
       "linkedName": "north left l1 close"
     },
     {
       "anchor": {
-        "x": 5.23575,
-        "y": 6.1114999999999995
+        "x": 4.45575,
+        "y": 6.45275
       },
       "prevControl": {
-        "x": 5.742427296129234,
-        "y": 5.7704672045284
+        "x": 4.962427296129234,
+        "y": 6.1117172045284
       },
       "nextControl": {
-        "x": 4.72875,
-        "y": 6.45275
+        "x": 3.9487499999999995,
+        "y": 6.7940000000000005
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.1797500000000003,
-        "y": 7.09625
+        "x": 2.1742500000000002,
+        "y": 6.56975
       },
       "prevControl": {
-        "x": 1.80375,
-        "y": 6.51125
+        "x": 2.7982500000000003,
+        "y": 5.98475
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "AutoHP",
+      "waypointRelativePos": 1.046153846153837,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "AutoHP"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 3.0,

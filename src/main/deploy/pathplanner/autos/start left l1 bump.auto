@@ -19,30 +19,6 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.7
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeStop"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "from north left to hp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeStart"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
             "waitTime": 1.0
           }
         },
@@ -55,25 +31,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "from left hp to south left"
+            "pathName": "from north left to bump"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Outtake"
+            "pathName": "from bump to bump"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeStop"
+            "pathName": "from bump right to hp"
           }
         }
       ]

@@ -93,17 +93,28 @@ public class RobotContainer {
                         () -> {
                                 var multiplier = m_driverStick.Axis(MayhemExtreme3dPro.Axis.Flapper).getAsDouble();
                                 multiplier = ((multiplier * -1) + 1.0) / 2; // rescale from [-1,1] to [0,1]
+                                multiplier = multiplier + .25;
 
                                 return -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Y).getAsDouble() * multiplier;
                         },
                         () -> {
                                 var multiplier = m_driverStick.Axis(MayhemExtreme3dPro.Axis.Flapper).getAsDouble();
                                 multiplier = ((multiplier * -1) + 1.0) / 2; // rescale from [-1,1] to [0,1]
+                                multiplier = multiplier + .25;
 
                                 return -m_driverStick.Axis(MayhemExtreme3dPro.Axis.X).getAsDouble() * multiplier;
                         })
                         .withControllerRotationAxis(
-                                        () -> -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble() * .8)
+                                        () -> {
+                                                var multiplier = m_driverStick.Axis(MayhemExtreme3dPro.Axis.Flapper)
+                                                                .getAsDouble();
+                                                multiplier = ((multiplier * -1) + 1.0) / 2; // rescale from [-1,1] to
+                                                                                            // [0,1]
+                                                multiplier = multiplier + .25;
+
+                                                return -m_driverStick.Axis(MayhemExtreme3dPro.Axis.Z).getAsDouble()
+                                                                * multiplier;
+                                        })
                         .deadband(OperatorConstants.DEADBAND).scaleTranslation(0.8).allianceRelativeControl(false);
 
         /**
@@ -161,6 +172,8 @@ public class RobotContainer {
                 m_auto.addAuto("New Auto", new PathPlannerAuto("New Auto"));
                 m_auto.addAuto("drive", new PathPlannerAuto("drive"));
                 m_auto.addAuto("start left l1 l1", new PathPlannerAuto("start left l1 l1"));
+                m_auto.addAuto("start left l1", new PathPlannerAuto("start left l1"));
+                m_auto.addAuto("start left l1 bump", new PathPlannerAuto("start left l1 bump"));
 
         }
 
@@ -363,7 +376,14 @@ public class RobotContainer {
         }
 
         private void configureNamedCommands() {
-                NamedCommands.registerCommand("AutoL1", ArmPositionCmd(-494, -1388, 0));
+                NamedCommands.registerCommand("AutoL1", ArmPositionCmd(-600, -1388, 0));
+                NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
+                NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
+
+                NamedCommands.registerCommand("IntakeStop", endEffector.setSpeedCmd(0.0));
+                NamedCommands.registerCommand("AutoHP", ArmPositionCmd(-480, -1200, 0));
+                NamedCommands.registerCommand("Stow", ArmPositionCmd(0, -1764, 0));
+
         }
 
         private Command ArmPositionCmd(double wristPos, double elbowPos, double shoulderPos) {

@@ -42,8 +42,8 @@ public class EndEffector extends SubsystemBase {
         motorFx.setControl(output.withOutput(intakeSpeed));
       }
 
-      SmartDashboard.putBoolean("EndEffector Limit Switch", limitSwitch.get());
     }
+    SmartDashboard.putBoolean("EndEffector Limit Switch", limitSwitch.get());
 
     // if (coralCaptured) {
     // double wristSpeed = wrist.getSpeed();
