@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LimeLight.LimeLightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem.SwerveSubsystem;
@@ -15,33 +16,69 @@ public class AlignToTarget extends Command {
   LimeLightSubsystem limelight;
   SwerveSubsystem swerve;
 
-  double rz;
+  double targetX;
+  double targetY;
+  double targetZ;
+
+  double endY;
+  double endX;
 
   /** Creates a new AlignToTarget. */
-  public AlignToTarget(LimeLightSubsystem l, SwerveSubsystem s) {
+  public AlignToTarget(LimeLightSubsystem l, SwerveSubsystem s, double y, double x) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(l);
     addRequirements(s);
 
     limelight = l;
     swerve = s;
+
+    endY = y;
+    endX = x;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     swerve.resetOdometry((new Pose2d()));
-    rz = limelight.getTargetRZ();
+    targetZ = limelight.getTargetRZ();
+    targetX = limelight.getTargetX();
+    targetY = limelight.getTargetY();
+  }
+
+  double getRobotXToEnd() {
+    Pose2d pose = swerve.getSwerveDrive().getPose();
+    double robotX = -targetY - endY - pose.getTranslation().getX(); // target Y is Robot X
+    return robotX;
+  }
+
+  double getRobotYToEnd() {
+    Pose2d pose = swerve.getSwerveDrive().getPose();
+    double robotY = targetX - endX - pose.getTranslation().getY(); // target X is -Robot Y
+    return robotY;
+  }
+
+  double getRobotRot() {
+    Pose2d pose = swerve.getSwerveDrive().getPose();
+    double robotRz = -(pose.getRotation().getDegrees() + targetZ);
+    return robotRz;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose2d pose = swerve.getSwerveDrive().getPose();
-    double robotRz = pose.getRotation().getDegrees() - rz;
+    double robotRz = getRobotRot();
+    double robotX = getRobotXToEnd();
+    double robotY = getRobotYToEnd();
 
     double driveRot = robotRz > 2 ? .5 : robotRz < -2 ? -.5 : 0;
-    swerve.drive(new ChassisSpeeds(0.0, 0.0, driveRot));
+    double driveX = robotX > 0 ? .3 : -.3;
+    double driveY = robotY < 0 ? .3 : -.3;
+
+    SmartDashboard.putNumber("Align To Target rotZ", driveRot);
+    SmartDashboard.putNumber("Align To Target drive x", driveX);
+    SmartDashboard.putNumber("Align To Target drive y", driveY);
+
+    swerve.drive(new ChassisSpeeds(0.0, driveY, driveRot));
   }
 
   // Called once the command ends or is interrupted.
@@ -54,10 +91,25 @@ public class AlignToTarget extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    Pose2d pose = swerve.getSwerveDrive().getPose();
-    double robotRz = pose.getRotation().getDegrees() - rz;
-    // return Math.abs(robotRz) < 5;
-    boolean b = robotRz > 2 ? false : robotRz < -2 ? false : true;
-    return b;
+    double robotRz = getRobotRot();
+    double robotX = getRobotXToEnd();
+    double robotY = getRobotYToEnd();
+
+    boolean rotDone = robotRz > 2 ? false : robotRz < -2 ? false : true;
+    boolean xDone = Math.abs(robotX) < .05;
+    boolean yDone = Math.abs(robotY) < .05;
+
+    SmartDashboard.putNumber("Align To Target robotRz", robotRz);
+    SmartDashboard.putNumber("Align To Target robotx", robotX);
+    SmartDashboard.putNumber("Align To Target roboty", robotY);
+    SmartDashboard.putNumber("Align To Target pose X", swerve.getSwerveDrive().getPose().getTranslation().getX());
+    SmartDashboard.putNumber("Align To Target targetY", targetY);
+    SmartDashboard.putNumber("Align To Target endY", endY);
+
+    SmartDashboard.putBoolean("Align To Target rot done", rotDone);
+    SmartDashboard.putBoolean("Align To Target x done", xDone);
+    SmartDashboard.putBoolean("Align To Target y done", yDone);
+    return rotDone && yDone; // xDone &&
+
   }
 }
