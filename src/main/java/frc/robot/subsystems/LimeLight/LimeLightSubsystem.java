@@ -24,6 +24,10 @@ public class LimeLightSubsystem extends SubsystemBase {
     NetworkTableEntry thoriz; // Horizontal sidelength of the rough bounding box (0-320 pixels)
     NetworkTableEntry tvert; // Vertical sidelength of the rough bounding box (0-320 pixels)
 
+    NetworkTableEntry botpose_targetspace;
+
+    double[] defaultArray = { 0.0, 0, 0, 0, 0 };
+
     public LimeLightSubsystem() {
         tv = table.getEntry("tv");
         tx = table.getEntry("tx");
@@ -36,6 +40,8 @@ public class LimeLightSubsystem extends SubsystemBase {
         tlong = table.getEntry("tlong");
         thoriz = table.getEntry("thoriz");
         tvert = table.getEntry("tvert");
+
+        botpose_targetspace = table.getEntry("botpose_targetspace");
 
         // addRequirements(RobotContainer.m_robotDrive);
     }
@@ -73,13 +79,34 @@ public class LimeLightSubsystem extends SubsystemBase {
         return tid.getDouble(0.0);
     }
 
+    public Double getTargetX() {
+        return botpose_targetspace.getDoubleArray(defaultArray)[0];
+    }
+
+    public Double getTargetY() {
+        return botpose_targetspace.getDoubleArray(defaultArray)[2];
+    }
+
+    public Double getTargetRZ() {
+        return botpose_targetspace.getDoubleArray(defaultArray)[4];
+    }
+
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("LimelightImage?", this.getTv());
-        // SmartDashboard.putNumber("LimelightTagID", tid.getDouble(0.0));
-        // SmartDashboard.putNumber("LimelightX", tx.getDouble(0.0));
-        // SmartDashboard.putNumber("LimelightY", ty.getDouble(0.0));
-        // SmartDashboard.putNumber("LimelightRotation", ts.getDouble(0.0));
+        SmartDashboard.putNumber("LimelightImage?", this.getTv());
+        SmartDashboard.putNumber("LimelightTagID", tid.getDouble(0.0));
+        SmartDashboard.putNumber("LimelightX", tx.getDouble(0.0));
+        SmartDashboard.putNumber("LimelightY", ty.getDouble(0.0));
+        SmartDashboard.putNumber("LimelightRotation", ts.getDouble(0.0));
         // SmartDashboard.putNumber("LimelightArea", ta.getDouble(0.0));
+
+        SmartDashboard.putNumber("Target X", botpose_targetspace.getDoubleArray(defaultArray)[0]);
+        // SmartDashboard.putNumber("Target 1",
+        // botpose_targetspace.getDoubleArray(defaultArray)[1]);
+        SmartDashboard.putNumber("Target Y", botpose_targetspace.getDoubleArray(defaultArray)[2]);
+        // SmartDashboard.putNumber("Target 3",
+        // botpose_targetspace.getDoubleArray(defaultArray)[3]);
+        SmartDashboard.putNumber("Target Degrees", botpose_targetspace.getDoubleArray(defaultArray)[4]);
     }
+
 }

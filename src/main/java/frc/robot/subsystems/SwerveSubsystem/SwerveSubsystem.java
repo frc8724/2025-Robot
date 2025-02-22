@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -129,6 +130,8 @@ public class SwerveSubsystem extends SubsystemBase {
       swerveDrive.updateOdometry();
       vision.updatePoseEstimation(swerveDrive);
     }
+    SmartDashboard.putNumber("drive offset",
+        swerveDrive.getPose().getTranslation().getDistance(new Translation2d(0, 0)));
   }
 
   // @Override
@@ -363,9 +366,42 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public Command driveToDistanceCommand(double distanceInMeters, double speedInMetersPerSecond) {
     return run(() -> drive(new ChassisSpeeds(speedInMetersPerSecond, 0, 0)))
+        .beforeStarting(() -> this.resetOdometry((new Pose2d())))
         .until(() -> swerveDrive.getPose().getTranslation().getDistance(new Translation2d(0, 0)) > distanceInMeters);
   }
 
+  public Command driveToTargetCmd(double x, double y, double rz) {
+    return run(() -> {
+      Pose2d pose = swerveDrive.getPose();
+      double robotRz = pose.getRotation().getDegrees() - rz;
+
+      double driveRot = robotRz > 2 ? -.5 : robotRz < -2 ? .5 : 0;
+      drive(new ChassisSpeeds(0.0, 0.0, driveRot));
+    })
+        .beforeStarting(() -> this.resetOdometry((new Pose2d())))
+        .until(() -> {
+          Pose2d pose = swerveDrive.getPose();
+          double robotRz = pose.getRotation().getDegrees() - rz;
+          double driveRot = robotRz > 2 ? -.5 : robotRz < -2 ? .5 : 0;
+          return driveRot == 0;
+
+          // pose.getRotation()
+          // return pose.getTranslation().getDistance(new Translation2d(0, 0)) > 1.0;
+
+        });
+  }
+
+  public Command driveToDistanceCommand(double distanceInMeters, double xspeedInMetersPerSecond,
+      double yspeedInMetersPerSecond) {
+    return run(() -> drive(new ChassisSpeeds(xspeedInMetersPerSecond, yspeedInMetersPerSecond, 0)))
+        .beforeStarting(() -> this.resetOdometry((new Pose2d())))
+        .until(() -> swerveDrive.getPose().getTranslation().getDistance(new Translation2d(0, 0)) > distanceInMeters);
+  }
+
+  public Command resetOdometryCmd() {
+    return runOnce(
+        () -> this.resetOdometry((new Pose2d())));
+  }
   /**
    * Replaces the swerve module feedforward with a new SimpleMotorFeedforward
    * object.
