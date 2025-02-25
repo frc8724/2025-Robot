@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,10 @@ public class AlignToTarget extends Command {
 
   double endY;
   double endX;
+
+  PIDController yPid = new PIDController(4.5, 0.0, 0.0);
+  PIDController xPid = new PIDController(4.5, 0.0, 0.0);
+  PIDController rotPid = new PIDController(0.5, 0.0, 0.0);
 
   /** Creates a new AlignToTarget. */
   public AlignToTarget(LimeLightSubsystem l, SwerveSubsystem s, double y, double x) {
@@ -53,7 +58,7 @@ public class AlignToTarget extends Command {
 
   double getRobotYToEnd() {
     Pose2d pose = swerve.getSwerveDrive().getPose();
-    double robotY = targetX - endX - pose.getTranslation().getY(); // target X is -Robot Y
+    double robotY = targetX + endX - pose.getTranslation().getY(); // target X is -Robot Y
     return robotY;
   }
 
@@ -70,15 +75,34 @@ public class AlignToTarget extends Command {
     double robotX = getRobotXToEnd();
     double robotY = getRobotYToEnd();
 
-    double driveRot = robotRz > 2 ? .5 : robotRz < -2 ? -.5 : 0;
-    double driveX = robotX > 0 ? .3 : -.3;
-    double driveY = robotY < 0 ? .3 : -.3;
+    // double driveRot = robotRz > 2 ? .5 : robotRz < -2 ? -.5 : 0;
+    // double driveX = robotX > 0 ? .3 : -.3;
+
+    double driveY = yPid.calculate(robotY);
+    double driveX = xPid.calculate(robotX);
+    double driveRot = rotPid.calculate(robotRz);
+
+    // limit driveX to [-.5, .5]
+    driveX = Math.min(0.5, driveX);
+    driveX = Math.max(-0.5, driveX);
+
+    // limit driveY to [-.5, .5]
+    driveY = Math.min(0.5, driveY);
+    driveY = Math.max(-0.5, driveY);
+
+    // limit driveRot to [-.5, .5]
+    driveRot = Math.min(0.35, driveRot);
+    driveRot = Math.max(-0.35, driveRot);
+
+    // double driveY = robotY > 0 ? .3 : -.3;
 
     SmartDashboard.putNumber("Align To Target rotZ", driveRot);
     SmartDashboard.putNumber("Align To Target drive x", driveX);
     SmartDashboard.putNumber("Align To Target drive y", driveY);
 
-    swerve.drive(new ChassisSpeeds(0.0, driveY, driveRot));
+    // driveX = 0;
+    // driveY = 0;
+    swerve.drive(new ChassisSpeeds(-driveX, -driveY, -driveRot));
   }
 
   // Called once the command ends or is interrupted.
@@ -109,7 +133,8 @@ public class AlignToTarget extends Command {
     SmartDashboard.putBoolean("Align To Target rot done", rotDone);
     SmartDashboard.putBoolean("Align To Target x done", xDone);
     SmartDashboard.putBoolean("Align To Target y done", yDone);
-    return rotDone && yDone; // xDone &&
+    return rotDone && xDone && yDone;
+    // return fa se;
 
   }
 }

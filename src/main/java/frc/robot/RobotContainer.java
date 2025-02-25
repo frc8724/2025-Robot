@@ -301,6 +301,7 @@ public class RobotContainer {
                 // .5));
                 // m_driverStick.Button(3).onTrue(drivebase.driveToTargetCmd(0, 0, 10));
                 m_driverStick.Button(3).onTrue(new AlignToTarget(m_limelight, drivebase, 1.0, 0.0));
+                m_driverStick.Button(4).onTrue(new AlignToTarget(m_limelight, drivebase, 1.0, -0.35));
 
                 // Stow - dpad down
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1764, 0));
