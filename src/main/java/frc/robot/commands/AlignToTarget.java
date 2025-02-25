@@ -39,15 +39,23 @@ public class AlignToTarget extends Command {
 
     endY = y;
     endX = x;
+
+    rotPid.setTolerance(15.0);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    swerve.resetOdometry((new Pose2d()));
-    targetZ = limelight.getTargetRZ();
-    targetX = limelight.getTargetX();
-    targetY = limelight.getTargetY();
+    getTargetCoords();
+  }
+
+  void getTargetCoords() {
+    if (limelight.getTv() == 1) {
+      swerve.resetOdometry((new Pose2d()));
+      targetZ = limelight.getTargetRZ();
+      targetX = limelight.getTargetX();
+      targetY = limelight.getTargetY();
+    }
   }
 
   double getRobotXToEnd() {
@@ -68,9 +76,17 @@ public class AlignToTarget extends Command {
     return robotRz;
   }
 
+  int loop;
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    if ((loop % 50) == 0) {
+      getTargetCoords();
+    }
+    loop++;
+
     double robotRz = getRobotRot();
     double robotX = getRobotXToEnd();
     double robotY = getRobotYToEnd();
@@ -83,8 +99,8 @@ public class AlignToTarget extends Command {
     double driveRot = rotPid.calculate(robotRz);
 
     // limit driveX to [-.5, .5]
-    driveX = Math.min(0.5, driveX);
-    driveX = Math.max(-0.5, driveX);
+    driveX = Math.min(0.75, driveX);
+    driveX = Math.max(-0.75, driveX);
 
     // limit driveY to [-.5, .5]
     driveY = Math.min(0.5, driveY);

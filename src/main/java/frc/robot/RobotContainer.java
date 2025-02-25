@@ -10,6 +10,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignToTarget;
+import frc.robot.commands.AlignToTarget2;
 import frc.robot.controls.JoystickPOVButton;
 import frc.robot.controls.MayhemDriverPad;
 import frc.robot.controls.MayhemExtreme3dPro;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -300,8 +302,12 @@ public class RobotContainer {
                 // m_driverStick.Button(4).onTrue(drivebase.driveToDistanceCommand(1.0, .5,
                 // .5));
                 // m_driverStick.Button(3).onTrue(drivebase.driveToTargetCmd(0, 0, 10));
-                m_driverStick.Button(3).onTrue(new AlignToTarget(m_limelight, drivebase, 1.0, 0.0));
-                m_driverStick.Button(4).onTrue(new AlignToTarget(m_limelight, drivebase, 1.0, -0.35));
+                m_driverStick.Button(2).onTrue(drivebase.driveToDistanceCommand(0, 1));
+                // m_driverStick.Button(3).onTrue(new AlignToTarget(m_limelight, drivebase, .65,
+                // 0.0));
+                m_driverStick.Button(4).onTrue(new AlignToTarget(m_limelight, drivebase, .65, -0.35));
+
+                m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1, 0));
 
                 // Stow - dpad down
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1764, 0));
