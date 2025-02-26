@@ -63,7 +63,8 @@ public class AlignToTarget2 extends InstantCommand {
     // cmd.schedule();
     var cmd = swerve.driveToPose(p);
     cmd.addRequirements(swerve);
-    cmd.unless(() -> false);
+    cmd = cmd.until(() -> false);
+    cmd = cmd.withTimeout(1);
     cmd.schedule();
   }
 }
