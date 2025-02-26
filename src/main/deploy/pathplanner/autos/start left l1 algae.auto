@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "from start left to north left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "north left low to north left AL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae High Remove"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

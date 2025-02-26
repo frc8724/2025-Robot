@@ -177,6 +177,7 @@ public class RobotContainer {
                 m_auto.addAuto("start left l1 l1", new PathPlannerAuto("start left l1 l1"));
                 m_auto.addAuto("start left l1", new PathPlannerAuto("start left l1"));
                 m_auto.addAuto("start left l1 bump", new PathPlannerAuto("start left l1 bump"));
+                m_auto.addAuto("start left l1 algae", new PathPlannerAuto("start left l1 algae"));
 
         }
 
@@ -422,6 +423,8 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoL1", ArmPositionCmd(-600, -1388, 0));
                 NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
                 NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
+                NamedCommands.registerCommand("Algae High", ArmPositionCmd(-750, -929, -13));
+                NamedCommands.registerCommand("Algae High Remove", ArmPositionCmd(-485, -929, -13));
 
                 NamedCommands.registerCommand("IntakeStop", endEffector.setSpeedCmd(0.0));
                 NamedCommands.registerCommand("AutoHP", ArmPositionCmd(-480, -1200, 0));
