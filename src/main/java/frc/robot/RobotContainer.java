@@ -303,8 +303,8 @@ public class RobotContainer {
                 // .5));
                 // m_driverStick.Button(3).onTrue(drivebase.driveToTargetCmd(0, 0, 10));
                 m_driverStick.Button(2).onTrue(drivebase.driveToDistanceCommand(0, 1));
-                // m_driverStick.Button(3).onTrue(new AlignToTarget(m_limelight, drivebase, .65,
-                // 0.0));
+                m_driverStick.Button(3).onTrue(new AlignToTarget(m_limelight, drivebase, .65,
+                                0.0));
                 m_driverStick.Button(4).onTrue(new AlignToTarget(m_limelight, drivebase, .65, -0.35));
 
                 m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1, 0));
@@ -346,19 +346,25 @@ public class RobotContainer {
                                 .onFalse(endEffector.setSpeedCmd(0.0));
 
                 // Knock Off Algae L2 - back
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON).onTrue(ArmPositionCmd(-750, 1420, -200));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON).onTrue(ArmPositionCmd(-668, 1460, -270));
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_BACK_BUTTON)
                                 .onFalse(
                                                 new SequentialCommandGroup(
-                                                                ArmPositionCmd(-750, 1275, -200),
                                                                 endEffector.setSpeedCmd(-.5),
+                                                                ArmPositionCmd(-668, 1288, -270),
                                                                 new WaitCommand(1.0),
                                                                 endEffector.setSpeedCmd(0)));
 
                 // Knock off algae L3 - start
-                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON).onTrue(ArmPositionCmd(-400, 950, -125));
                 m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON)
-                                .onFalse(ArmPositionCmd(-400, 720, -125));
+                                .onTrue(ArmPositionCmd(-547, 1033, -177));
+                m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_START_BUTTON)
+                                .onFalse(
+                                                new SequentialCommandGroup(
+                                                                endEffector.setSpeedCmd(-.5),
+                                                                ArmPositionCmd(-399, 760, -177),
+                                                                new WaitCommand(1.0),
+                                                                endEffector.setSpeedCmd(0)));
 
                 // Manual Elbow up-down - left y-axis up/down
                 // m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS,

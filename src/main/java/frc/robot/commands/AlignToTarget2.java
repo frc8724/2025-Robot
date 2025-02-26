@@ -4,11 +4,14 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Meter;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.LimeLight.LimeLightSubsystem;
@@ -44,12 +47,20 @@ public class AlignToTarget2 extends InstantCommand {
     double robotY = targetX + endX;
     double robotRz = -(targetZ);
 
-    swerve.resetOdometry((new Pose2d()));
+    // swerve.resetOdometry((new Pose2d()));
     SmartDashboard.putNumber("Align To Target robotRz", robotRz);
     SmartDashboard.putNumber("Align To Target robotx", robotX);
     SmartDashboard.putNumber("Align To Target roboty", robotY);
 
-    Pose2d p = new Pose2d(robotX, robotY, Rotation2d.fromDegrees(robotRz));
+    Pose2d robotPose = swerve.getPose();
+    Pose2d p = // new Pose2d(robotX, robotY, Rotation2d.fromDegrees(robotRz));
+        robotPose.transformBy(new Transform2d(new Translation2d(Meter.of(1), // robotX
+            Meter.of(0)), // 0
+            Rotation2d.fromDegrees(robotRz))); // robotY
+
+    // Command cmd = swerve.driveToPose(p);
+    // cmd.addRequirements(swerve);
+    // cmd.schedule();
     swerve.driveToPose(p).until(() -> false).schedule();
   }
 }
