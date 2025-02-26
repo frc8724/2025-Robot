@@ -361,10 +361,20 @@ public class RobotContainer {
                                 .onFalse(ArmPositionCmd(-400, 720, -125));
 
                 // Manual Elbow up-down - left y-axis up/down
-                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS, Direction.POSITIVE_ONLY)
-                                .onTrue(arm.setElbowPositionOffset(20));
-                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS, Direction.NEGATIVE_ONLY)
-                                .onTrue(arm.setElbowPositionOffset(-20));
+                // m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS,
+                // Direction.POSITIVE_ONLY)
+                // .onTrue(arm.setElbowPositionOffset(20));
+                // m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS,
+                // Direction.NEGATIVE_ONLY)
+                // .onTrue(arm.setElbowPositionOffset(-20));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.POSITIVE_ONLY)
+                                .onTrue(arm.setElbowSpeedCmd(-.2));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.POSITIVE_ONLY)
+                                .onFalse(arm.setElbowSpeedCmd(0.0));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.NEGATIVE_ONLY)
+                                .onTrue(arm.setElbowSpeedCmd(.2));
+                m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.NEGATIVE_ONLY)
+                                .onFalse(arm.setElbowSpeedCmd(0.0));
 
                 // Manual Shoulder in-out - right x-axis left/right
                 m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_Y_AXIS, Direction.POSITIVE_ONLY)
