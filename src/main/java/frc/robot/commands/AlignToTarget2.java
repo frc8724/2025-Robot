@@ -50,6 +50,6 @@ public class AlignToTarget2 extends InstantCommand {
     SmartDashboard.putNumber("Align To Target roboty", robotY);
 
     Pose2d p = new Pose2d(robotX, robotY, Rotation2d.fromDegrees(robotRz));
-    CommandScheduler.getInstance().schedule(swerve.driveToPose(p));
+    swerve.driveToPose(p).until(() -> false).schedule();
   }
 }
