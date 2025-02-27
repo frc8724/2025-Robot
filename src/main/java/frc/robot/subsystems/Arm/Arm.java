@@ -51,9 +51,6 @@ public class Arm extends SubsystemBase {
     elbowPid.setTolerance(30, 100);
     shoulderPid.setTolerance(30, 100);
 
-    // elbowPid.enableContinuousInput(0, 4095);
-    // shoulderPid.enableContinuousInput(0, 4095);
-
     shoulderLeft.setControl(new Follower(Constants.DriveConstants.kShoulderRightMotor, true));
 
     var shoulderConfig = new TalonFXConfiguration();

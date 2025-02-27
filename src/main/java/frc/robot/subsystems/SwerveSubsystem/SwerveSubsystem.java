@@ -132,6 +132,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     SmartDashboard.putNumber("drive offset",
         swerveDrive.getPose().getTranslation().getDistance(new Translation2d(0, 0)));
+
+    SmartDashboard.putNumber("robot rotation",
+        swerveDrive.getPose().getRotation().getDegrees());
+
   }
 
   // @Override

@@ -31,9 +31,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
@@ -42,9 +44,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import static edu.wpi.first.units.Units.Meter;
+
 import java.io.File;
 import java.lang.management.MemoryType;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -214,7 +219,9 @@ public class RobotContainer {
                 // if (RobotBase.isSimulation()) {
                 // drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
                 // } else {
+
                 drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+
                 // }
 
                 // if (Robot.isSimulation()) {
@@ -308,7 +315,27 @@ public class RobotContainer {
                                 0.0));
                 m_driverStick.Button(4).onTrue(new AlignToTarget(m_limelight, drivebase, .65, -0.35));
 
-                m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1, 0));
+                m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
+                                0));
+                // m_driverStick.Button(1).onTrue(new DeferredCommand(() -> {
+                // double targetZ = m_limelight.getTargetRZ();
+                // double targetX = m_limelight.getTargetX();
+                // double targetY = m_limelight.getTargetY();
+
+                // double robotX = -targetY - .65;
+                // double robotY = targetX + 0;
+                // double robotRz = -(targetZ);
+
+                // SmartDashboard.putNumber("Align To Target robotRz", robotRz);
+                // SmartDashboard.putNumber("Align To Target robotx", robotX);
+                // SmartDashboard.putNumber("Align To Target roboty", robotY);
+
+                // drivebase.getSwerveDrive().resetOdometry(new Pose2d());
+                // Pose2d p = new Pose2d(new Translation2d(Meter.of(1), Meter.of(.25)),
+                // Rotation2d.fromDegrees(0));
+                // return drivebase.driveToPose(p);
+
+                // }, Set.of(drivebase, m_limelight)));
 
                 // Stow - dpad down
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1764, 0));

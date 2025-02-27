@@ -72,7 +72,7 @@ public class AlignToTarget extends Command {
 
   double getRobotRot() {
     Pose2d pose = swerve.getSwerveDrive().getPose();
-    double robotRz = -(pose.getRotation().getDegrees() + targetZ);
+    double robotRz = pose.getRotation().getDegrees() - targetZ;
     return robotRz;
   }
 
@@ -82,9 +82,9 @@ public class AlignToTarget extends Command {
   @Override
   public void execute() {
 
-    if ((loop % 50) == 0) {
-      getTargetCoords();
-    }
+    // if ((loop % 50) == 0) {
+    // getTargetCoords(false);
+    // }
     loop++;
 
     double robotRz = getRobotRot();
@@ -110,15 +110,13 @@ public class AlignToTarget extends Command {
     driveRot = Math.min(0.35, driveRot);
     driveRot = Math.max(-0.35, driveRot);
 
-    // double driveY = robotY > 0 ? .3 : -.3;
-
     SmartDashboard.putNumber("Align To Target rotZ", driveRot);
     SmartDashboard.putNumber("Align To Target drive x", driveX);
     SmartDashboard.putNumber("Align To Target drive y", driveY);
 
-    // driveX = 0;
-    // driveY = 0;
-    swerve.drive(new ChassisSpeeds(-driveX, -driveY, -driveRot));
+    driveX = 0;
+    driveY = 0;
+    swerve.drive(new ChassisSpeeds(-driveX, -driveY, driveRot));
   }
 
   // Called once the command ends or is interrupted.
@@ -149,7 +147,7 @@ public class AlignToTarget extends Command {
     SmartDashboard.putBoolean("Align To Target rot done", rotDone);
     SmartDashboard.putBoolean("Align To Target x done", xDone);
     SmartDashboard.putBoolean("Align To Target y done", yDone);
-    return rotDone && xDone && yDone;
+    return false;// rotDone;// && xDone && yDone;
     // return fa se;
 
   }

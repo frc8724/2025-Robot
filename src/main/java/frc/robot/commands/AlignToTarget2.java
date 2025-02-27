@@ -52,19 +52,20 @@ public class AlignToTarget2 extends InstantCommand {
     SmartDashboard.putNumber("Align To Target robotx", robotX);
     SmartDashboard.putNumber("Align To Target roboty", robotY);
 
-    Pose2d robotPose = swerve.getPose();
-    Pose2d p = // new Pose2d(robotX, robotY, Rotation2d.fromDegrees(robotRz));
-        robotPose.transformBy(new Transform2d(new Translation2d(Meter.of(1), // robotX
-            Meter.of(0)), // 0
-            Rotation2d.fromDegrees(robotRz))); // robotY
+    // Pose2d robotPose = swerve.getPose();
+    swerve.resetOdometry(new Pose2d(new Translation2d(Meter.of(1), Meter.of(1)), Rotation2d.fromDegrees(0)));
+    Pose2d p = new Pose2d(new Translation2d(Meter.of(1.0), Meter.of(1.25)), Rotation2d.fromDegrees(0));
+    // Pose2d p = // new Pose2d(robotX, robotY, Rotation2d.fromDegrees(robotRz));
+    // robotPose.transformBy(new Transform2d(new Translation2d(Meter.of(1), //
+    // robotX
+    // Meter.of(0)), // 0
+    // Rotation2d.fromDegrees(0))); // robotY
 
     // Command cmd = swerve.driveToPose(p);
     // cmd.addRequirements(swerve);
     // cmd.schedule();
     var cmd = swerve.driveToPose(p);
     cmd.addRequirements(swerve);
-    cmd = cmd.until(() -> false);
-    cmd = cmd.withTimeout(1);
     cmd.schedule();
   }
 }
