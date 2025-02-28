@@ -56,14 +56,12 @@ public class AlignToTargetZ extends Command {
     if (limelight.getTv() == 1) {
       initialPose = swerve.getPose();
 
-      // swerve.resetOdometry((new Pose2d()));
       targetZ = limelight.getTargetRZ();
     }
   }
 
   double getRobotRot() {
     Transform2d pose = swerve.getSwerveDrive().getPose().minus(initialPose);
-    // Pose2d pose = swerve.getSwerveDrive().getPose();
     double robotRz = pose.getRotation().getDegrees() - targetZ;
     return robotRz;
   }
@@ -76,8 +74,8 @@ public class AlignToTargetZ extends Command {
     double driveRot = rotPid.calculate(robotRz);
 
     // limit driveRot to [-.5, .5]
-    driveRot = Math.min(0.35, driveRot);
-    driveRot = Math.max(-0.35, driveRot);
+    driveRot = Math.min(0.6, driveRot);
+    driveRot = Math.max(-0.6, driveRot);
 
     SmartDashboard.putNumber("Align To Target rotZ", driveRot);
 

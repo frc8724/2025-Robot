@@ -31,6 +31,10 @@ public class MayhemExtreme3dPro {
         return new JoystickButton(m_joystick, button);
     }
 
+    public Trigger PovButton(int button) {
+        return new JoystickPOVButton(m_joystick, button);
+    }
+
     public DoubleSupplier Axis(Axis axis) {
         return () -> m_joystick.getRawAxis(axis.getValue());
     }

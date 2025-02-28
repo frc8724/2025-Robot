@@ -31,6 +31,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -141,9 +142,8 @@ public class RobotContainer {
          * Clone the angular velocity input stream and converts it to a robotRelative
          * input stream.
          */
-        // SwerveInputStream driveRobotOriented =
-        // driveAngularVelocity.copy().robotRelative(true)
-        // .allianceRelativeControl(false);
+        SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(true)
+                        .allianceRelativeControl(false);
 
         // SwerveInputStream driveAngularVelocityKeyboard =
         // SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -301,7 +301,7 @@ public class RobotContainer {
                 m_driverStick.Button(8).onFalse(wrist.setSpeedCmd(0));
 
                 m_driverStick.Button(6).onTrue(drivebase.zerCommand());
-                m_driverStick.Button(5).onTrue(arm.shoulderZeroCmd());
+                // m_driverStick.Button(5).onTrue(arm.shoulderZeroCmd());
 
                 // m_driverStick.Button(3).onTrue(
                 // new SequentialCommandGroup(
@@ -314,14 +314,37 @@ public class RobotContainer {
                 // m_driverStick.Button(4).onTrue(drivebase.driveToDistanceCommand(1.0, .5,
                 // .5));
                 // m_driverStick.Button(3).onTrue(drivebase.driveToTargetCmd(0, 0, 10));
-                m_driverStick.Button(2).onTrue(drivebase.driveToDistanceCommand(0, 1));
-                m_driverStick.Button(3).onTrue(new AlignToTargetXY(m_limelight, drivebase, 1,
-                                0.0));
-                m_driverStick.Button(4).onTrue(new AlignToTargetZ(m_limelight, drivebase, 1, 0));
+                // m_driverStick.Button(2).onTrue(drivebase.driveToDistanceCommand(0, 1));
+                m_driverStick.Button(3).whileTrue(
+                                new SequentialCommandGroup(
+                                                new AlignToTargetZ(m_limelight, drivebase, .75, 0),
+                                                new AlignToTargetXY(m_limelight, drivebase, .75, 0.0),
+                                                new AlignToTargetZ(m_limelight, drivebase, 751, 0)));
+                m_driverStick.Button(4).whileTrue(
+                                new SequentialCommandGroup(
+                                                new AlignToTargetZ(m_limelight, drivebase, .75, -.39),
+                                                new AlignToTargetXY(m_limelight, drivebase, .75, -.39),
+                                                new AlignToTargetZ(m_limelight, drivebase, .75, -.39),
+                                                new AlignToTargetXY(m_limelight, drivebase, .75, -0.39)));
+
+                ChassisSpeeds slowFwd = new ChassisSpeeds(.3, 0, 0);
+                ChassisSpeeds slowBack = new ChassisSpeeds(-.3, 0, 0);
+                ChassisSpeeds slowLeft = new ChassisSpeeds(0, 0.3, 0);
+                ChassisSpeeds slowRight = new ChassisSpeeds(0, -0.3, 0);
+
+                // m_driverStick.Button(1).whileTrue(drivebase.driveCmd(slowFwd));
+                m_driverStick.PovButton(JoystickPOVButton.NORTH).whileTrue(drivebase.driveCmd(slowFwd));
+                m_driverStick.PovButton(JoystickPOVButton.SOUTH).whileTrue(drivebase.driveCmd(slowBack));
+                m_driverStick.PovButton(JoystickPOVButton.WEST).whileTrue(drivebase.driveCmd(slowLeft));
+                m_driverStick.PovButton(JoystickPOVButton.EAST).whileTrue(drivebase.driveCmd(slowRight));
+
+                // m_driverStick.Button(4).onTrue(new AlignToTargetZ(m_limelight, drivebase, 1,
+                // 0));
 
                 // m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
                 // 0));
-                m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1, 0));
+                // m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
+                // 0));
 
                 // swerve.getPose();
                 // Pose2d p = // new Pose2d(robotX, robotY, Rotation2d.fromDegrees(robotRz));
@@ -387,6 +410,8 @@ public class RobotContainer {
                                                                 new WaitCommand(1.0),
                                                                 endEffector.setSpeedCmd(0)));
 
+                m_operatorPad.Button(9).onTrue(arm.shoulderZeroCmd());
+
                 // Manual Elbow up-down - left y-axis up/down
                 // m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_RIGHT_Y_AXIS,
                 // Direction.POSITIVE_ONLY)
@@ -440,7 +465,7 @@ public class RobotContainer {
         }
 
         private void configureNamedCommands() {
-                NamedCommands.registerCommand("AutoL1", ArmPositionCmd(-575, -1388, 0));
+                NamedCommands.registerCommand("AutoL1", ArmPositionCmd(-525, -1388, 0));
                 NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
                 NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
                 NamedCommands.registerCommand("Algae High", ArmPositionCmd(-750, -929, -13));
@@ -448,6 +473,7 @@ public class RobotContainer {
 
                 NamedCommands.registerCommand("IntakeStop", endEffector.setSpeedCmd(0.0));
                 NamedCommands.registerCommand("AutoHP", ArmPositionCmd(-480, -1200, 0));
+                NamedCommands.registerCommand("TeleHP", ArmPositionCmd(-693, 1103, -219));
                 NamedCommands.registerCommand("Stow", ArmPositionCmd(0, -1764, 0));
 
         }

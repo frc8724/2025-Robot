@@ -57,6 +57,12 @@
           "data": {
             "pathName": "from bump right to hp"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "TeleHP"
+          }
         }
       ]
     }
