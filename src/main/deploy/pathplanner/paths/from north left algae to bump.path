@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.1742500000000002,
-        "y": 6.56975
+        "x": 5.236,
+        "y": 4.951
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.613,
-        "y": 6.033499999999999
+        "x": 5.294499999999999,
+        "y": 5.614
       },
       "isLocked": false,
-      "linkedName": "left hp"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.8,
-        "y": 5.0
+        "x": 6.318,
+        "y": 6.125
       },
       "prevControl": {
-        "x": 3.8,
-        "y": 5.6045
+        "x": 6.068,
+        "y": 6.125
+      },
+      "nextControl": {
+        "x": 7.946631519098166,
+        "y": 6.125
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.57575,
+        "y": 6.125
+      },
+      "prevControl": {
+        "x": 6.863871982008154,
+        "y": 6.125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "south left l1 close"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,19 +49,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "AutoL1",
-      "waypointRelativePos": 0.2074441687344839,
+      "name": "Stow",
+      "waypointRelativePos": 0.4506203473945454,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "AutoL1"
+          "name": "Stow"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -54,13 +70,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 93.31778116833485
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Left",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -50.93480587852183
+    "rotation": 55.645
   },
   "useDefaultConstraints": false
 }

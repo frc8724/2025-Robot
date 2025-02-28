@@ -27,6 +27,7 @@ import frc.robot.subsystems.System.SystemStopAllMotors;
 import frc.robot.subsystems.Targeting.Targeting;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -183,6 +184,7 @@ public class RobotContainer {
                 m_auto.addAuto("start left l1", new PathPlannerAuto("start left l1"));
                 m_auto.addAuto("start left l1 bump", new PathPlannerAuto("start left l1 bump"));
                 m_auto.addAuto("start left l1 algae", new PathPlannerAuto("start left l1 algae"));
+                m_auto.addAuto("start left l1 algae bump", new PathPlannerAuto("start left l1 algae bump"));
 
         }
 
@@ -315,27 +317,16 @@ public class RobotContainer {
                                 0.0));
                 m_driverStick.Button(4).onTrue(new AlignToTarget(m_limelight, drivebase, .65, -0.35));
 
-                m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
-                                0));
-                // m_driverStick.Button(1).onTrue(new DeferredCommand(() -> {
-                // double targetZ = m_limelight.getTargetRZ();
-                // double targetX = m_limelight.getTargetX();
-                // double targetY = m_limelight.getTargetY();
+                // m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
+                // 0));
+                m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1, 0));
 
-                // double robotX = -targetY - .65;
-                // double robotY = targetX + 0;
-                // double robotRz = -(targetZ);
-
-                // SmartDashboard.putNumber("Align To Target robotRz", robotRz);
-                // SmartDashboard.putNumber("Align To Target robotx", robotX);
-                // SmartDashboard.putNumber("Align To Target roboty", robotY);
-
-                // drivebase.getSwerveDrive().resetOdometry(new Pose2d());
-                // Pose2d p = new Pose2d(new Translation2d(Meter.of(1), Meter.of(.25)),
-                // Rotation2d.fromDegrees(0));
-                // return drivebase.driveToPose(p);
-
-                // }, Set.of(drivebase, m_limelight)));
+                // swerve.getPose();
+                // Pose2d p = // new Pose2d(robotX, robotY, Rotation2d.fromDegrees(robotRz));
+                // robotPose.transformBy(new Transform2d(new Translation2d(Meter.of(1), //
+                // robotX
+                // Meter.of(0)), // 0
+                // Rotation2d.fromDegrees(robotRz)));
 
                 // Stow - dpad down
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1764, 0));
@@ -447,11 +438,11 @@ public class RobotContainer {
         }
 
         private void configureNamedCommands() {
-                NamedCommands.registerCommand("AutoL1", ArmPositionCmd(-600, -1388, 0));
+                NamedCommands.registerCommand("AutoL1", ArmPositionCmd(-575, -1388, 0));
                 NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
                 NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
                 NamedCommands.registerCommand("Algae High", ArmPositionCmd(-750, -929, -13));
-                NamedCommands.registerCommand("Algae High Remove", ArmPositionCmd(-485, -929, -13));
+                NamedCommands.registerCommand("Algae High Remove", ArmPositionCmd(-485, -900, -13));
 
                 NamedCommands.registerCommand("IntakeStop", endEffector.setSpeedCmd(0.0));
                 NamedCommands.registerCommand("AutoHP", ArmPositionCmd(-480, -1200, 0));
