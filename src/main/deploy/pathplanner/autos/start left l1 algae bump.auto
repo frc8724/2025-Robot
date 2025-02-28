@@ -43,7 +43,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "north left to hp"
+            "pathName": "from north left algae to bump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "from bump to bump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "from bump right to hp"
           }
         }
       ]
