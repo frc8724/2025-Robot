@@ -11,6 +11,8 @@ import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignToTarget;
 import frc.robot.commands.AlignToTarget2;
+import frc.robot.commands.AlignToTargetXY;
+import frc.robot.commands.AlignToTargetZ;
 import frc.robot.controls.JoystickPOVButton;
 import frc.robot.controls.MayhemDriverPad;
 import frc.robot.controls.MayhemExtreme3dPro;
@@ -311,12 +313,12 @@ public class RobotContainer {
                 // .5));
                 // m_driverStick.Button(3).onTrue(drivebase.driveToTargetCmd(0, 0, 10));
                 m_driverStick.Button(2).onTrue(drivebase.driveToDistanceCommand(0, 1));
-                m_driverStick.Button(3).onTrue(new AlignToTarget(m_limelight, drivebase, .65,
+                m_driverStick.Button(3).onTrue(new AlignToTargetXY(m_limelight, drivebase, 1,
                                 0.0));
-                m_driverStick.Button(4).onTrue(new AlignToTarget(m_limelight, drivebase, .65, -0.35));
+                m_driverStick.Button(4).onTrue(new AlignToTargetZ(m_limelight, drivebase, 1, 0));
 
-                m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
-                                0));
+                // m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
+                // 0));
                 // m_driverStick.Button(1).onTrue(new DeferredCommand(() -> {
                 // double targetZ = m_limelight.getTargetRZ();
                 // double targetX = m_limelight.getTargetX();
