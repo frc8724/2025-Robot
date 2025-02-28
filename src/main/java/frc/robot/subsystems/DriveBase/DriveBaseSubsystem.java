@@ -1,11 +1,6 @@
 package frc.robot.subsystems.DriveBase;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,10 +9,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveBaseSubsystem extends SubsystemBase {
@@ -58,7 +51,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
             DriveConstants.kRearRightTurningEncoderReversed,
             DriveConstants.RearRightMag);
 
-    private final WPI_Pigeon2 m_gyro = new WPI_Pigeon2(22, "canivore");
+    private final Pigeon2 m_gyro = new Pigeon2(22, "canivore");
 
     SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
             DriveConstants.kDriveKinematics,
@@ -71,41 +64,40 @@ public class DriveBaseSubsystem extends SubsystemBase {
             });
 
     public DriveBaseSubsystem() {
-        m_gyro.configFactoryDefault();
-        m_gyro.setYaw(0);
-        AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
-                this::resetPose, // Method to reset odometry (will be called if your auto has
-                // a starting pose)
-                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT
-                // RELATIVE
-                this::driveRobotRelative, // Method that will drive the robot given ROBOT
-                // RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
-                        // likely live in your
-                        // Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        4.5, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest
-                        // module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the
-                // options here
-                ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red
-                    // alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        // m_gyro.setYaw(0);
+        // AutoBuilder.configure(
+        //         this::getPose, // Robot pose supplier
+        //         this::resetPose, // Method to reset odometry (will be called if your auto has
+        //         // a starting pose)
+        //         this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT
+        //         // RELATIVE
+        //         this::driveRobotRelative, // Method that will drive the robot given ROBOT
+        //         // RELATIVE ChassisSpeeds
+        //         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
+        //                 // likely live in your
+        //                 // Constants class
+        //                 new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+        //                 new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+        //                 4.5, // Max module speed, in m/s
+        //                 0.4, // Drive base radius in meters. Distance from robot center to furthest
+        //                 // module.
+        //                 new ReplanningConfig() // Default path replanning config. See the API for the
+        //         // options here
+        //         ),
+        //         () -> {
+        //             // Boolean supplier that controls when the path will be mirrored for the red
+        //             // alliance
+        //             // This will flip the path being followed to the red side of the field.
+        //             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                this // Reference to this subsystem to set requirements
-        );
+        //             var alliance = DriverStation.getAlliance();
+        //             if (alliance.isPresent()) {
+        //                 return alliance.get() == DriverStation.Alliance.Red;
+        //             }
+        //             return false;
+        //         },
+        //         this // Reference to this subsystem to set requirements
+        // );
         zeroWheels();
     }
 
@@ -141,9 +133,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
                 m_rearRightSwerveModule.getState());
     }
 
-    public void driveRobotRelative(ChassisSpeeds speeds) {
-        this.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
-    }
+    // public void driveRobotRelative(ChassisSpeeds speeds) {
+    //     this.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
+    // }
 
     public void resetPose(Pose2d pose) {
         m_odometry.resetPosition(
@@ -205,6 +197,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
      */
     public void drive(double forwardSpeed, double sideSpeed, double rot, boolean fieldRelative) {
         ChassisSpeeds roboChassisSpeeds = null;
+
+        // forwardSpeed = 2;
+        // sideSpeed = 0.0;
+        // rot = 0;
 
         if (fieldRelative) {
             var imu = m_gyro.getRotation2d();
@@ -278,7 +274,29 @@ public class DriveBaseSubsystem extends SubsystemBase {
         m_frontRightSwerveModule.setTurningWheel(rad);
         m_rearRightSwerveModule.setTurningWheel(rad);
         m_rearLeftSwerveModule.setTurningWheel(rad);
+    }
 
+    public Command SetWheesAtCmd(double rad){
+        return runOnce(() -> {
+            this.setWheelsAt(rad);
+        });
+    }
+    
+    public Command ResetTurning(){
+        return runOnce( () -> {
+            System.out.println("Reset Turning");
+            m_frontLeftSwerveModule.resetEncoders();
+            m_frontRightSwerveModule.resetEncoders();
+            m_rearRightSwerveModule.resetEncoders();
+            m_rearLeftSwerveModule.resetEncoders();
+        });
+    }
+
+    public Command print(){
+        return runOnce(() -> {
+            System.out.println("Print Command");
+
+        });
     }
 
     /**

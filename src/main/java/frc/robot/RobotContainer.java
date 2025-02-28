@@ -11,13 +11,6 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.controls.MayhemExtreme3dPro;
 import frc.robot.controls.MayhemLogitechAttack3;
 import frc.robot.controls.MayhemOperatorPad;
-import frc.robot.motors.FakeFalconFX;
-import frc.robot.motors.FakeMayhemCANSparkMax;
-import frc.robot.motors.IMayhemCANSparkMax;
-import frc.robot.motors.IMayhemTalonFX;
-import frc.robot.motors.MayhemCANSparkMax;
-import frc.robot.motors.MayhemTalonFX;
-import frc.robot.motors.MayhemTalonFX.CurrentLimit;
 import frc.robot.subsystems.Autonomous.*;
 import frc.robot.subsystems.Autonomous.test.AutoTestSquare;
 import frc.robot.subsystems.DriveBase.DriveBaseSubsystem;
@@ -38,7 +31,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -68,12 +60,22 @@ public class RobotContainer {
                 // Configure the trigger bindings
                 configureBindings();
                 configureNamedCommands();
-                m_robotDrive.setDefaultCommand(new DriveByJoystick(m_driverStick));
+                // m_robotDrive.setDefaultCommand(new DriveByJoystick(m_driverStick));
 
                 m_driverStick.Button(9).onTrue(new DriveZeroGyro(0));
+                m_driverStick.Button(11).onTrue(m_robotDrive.ResetTurning());
+                m_driverStick.Button(1).onTrue(m_robotDrive.print());
+
+                m_driverStick.Button(7).onTrue(m_robotDrive.SetWheesAtCmd(0));
+                m_driverStick.Button(8).onTrue(m_robotDrive.SetWheesAtCmd(1.5));
+                m_driverStick.Button(9).onTrue(m_robotDrive.SetWheesAtCmd(-1.5));
+                m_driverStick.Button(10).onTrue(m_robotDrive.SetWheesAtCmd(3.14));
+
 
                 m_auto.addAuto(new WaitCommand(5));
                 m_auto.addAuto(new AutoDriveOut());
+
+                m_robotDrive.ResetTurning();
         }
 
         /**

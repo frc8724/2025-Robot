@@ -4,13 +4,13 @@
 
 package frc.robot.subsystems.SimpleFalconSubsystem;
 
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -27,13 +27,13 @@ public class SwerveDriveKraken extends SubsystemBase {
   final double WheelDiameterMeters = 0.102;
   final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
 
-  StatusSignal<Double> velocitySupplier;
-  StatusSignal<Double> motorPosition;
+  StatusSignal<AngularVelocity> velocitySupplier;
+  StatusSignal<Angle> motorPosition;
   int motorID;
 
   /** Creates a new SimpleFalconSubsystem. */
   public SwerveDriveKraken(String name, int id, boolean invert) {
-    motor = new TalonFX(id);
+    motor = new TalonFX(id, "canivore");
     motor.setInverted(invert);
     this.motorID = id;
     this.name = name;

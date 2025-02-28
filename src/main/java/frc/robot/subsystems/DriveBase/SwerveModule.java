@@ -109,8 +109,8 @@ public class SwerveModule extends SubsystemBase {
     @Override
     public void periodic() {
 
-        int magTicks = m_magEncoder.get();
-        double wheelTicks = m_turningMotor.getRotationTicks();
+        // int magTicks = m_magEncoder.get();
+        // double wheelTicks = m_turningMotor.getRotationTicks();
 
         // System.out.println(this.m_magEncoder.m_analogInput.getChannel() + " Swerve
         // Mag " + magTicks);
