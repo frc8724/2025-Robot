@@ -72,7 +72,7 @@ public class Arm extends SubsystemBase {
     double shoulderPower = shoulderPid.calculate(shoulderEncoder.get(), shoulderSetpoint);
 
     elbowPower = MathUtil.clamp(elbowPower, -.5, .5);
-    shoulderPower = MathUtil.clamp(shoulderPower, -.5, .5);
+    shoulderPower = MathUtil.clamp(shoulderPower, -.2, .2);
 
     if (elbowPosMode) {
       elbow.setControl(output.withOutput(elbowPower));
