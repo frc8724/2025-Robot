@@ -10,7 +10,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignToTarget;
-import frc.robot.commands.AlignToTarget2;
+// import frc.robot.commands.AlignToTarget2;
 import frc.robot.commands.AlignToTargetXY;
 import frc.robot.commands.AlignToTargetZ;
 import frc.robot.controls.JoystickPOVButton;
@@ -187,6 +187,7 @@ public class RobotContainer {
         m_auto.addAuto("start left l1 bump", new PathPlannerAuto("start left l1 bump"));
         m_auto.addAuto("start left l1 algae", new PathPlannerAuto("start left l1 algae"));
         m_auto.addAuto("start left l1 algae bump", new PathPlannerAuto("start left l1 algae bump"));
+        m_auto.addAuto("start right l1 to HP", new PathPlannerAuto("start right l1 to HP"));
 
     }
 

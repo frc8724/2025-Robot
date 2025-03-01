@@ -61,9 +61,14 @@ public class AlignToTargetZ extends Command {
   }
 
   double getRobotRot() {
-    Transform2d pose = swerve.getSwerveDrive().getPose().minus(initialPose);
-    double robotRz = pose.getRotation().getDegrees() - targetZ;
-    return robotRz;
+    try {
+      Pose2d p = swerve.getSwerveDrive().getPose();
+      Transform2d pose = p.minus(initialPose);
+      double robotRz = pose.getRotation().getDegrees() - targetZ;
+      return robotRz;
+    } catch (Exception ex) {
+      return 0;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

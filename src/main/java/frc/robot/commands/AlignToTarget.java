@@ -59,19 +59,30 @@ public class AlignToTarget extends Command {
   }
 
   double getRobotXToEnd() {
-    Pose2d pose = swerve.getSwerveDrive().getPose();
-    double robotX = -targetY - endY - pose.getTranslation().getX(); // target Y is Robot X
-    return robotX;
+    try {
+      Pose2d pose = swerve.getSwerveDrive().getPose();
+      double robotX = -targetY - endY - pose.getTranslation().getX(); // target Y is Robot X
+      return robotX;
+    } catch (Exception ex) {
+      return 0;
+    }
   }
 
   double getRobotYToEnd() {
-    Pose2d pose = swerve.getSwerveDrive().getPose();
-    double robotY = targetX + endX - pose.getTranslation().getY(); // target X is -Robot Y
-    return robotY;
+    try {
+      Pose2d pose = swerve.getSwerveDrive().getPose();
+      double robotY = targetX + endX - pose.getTranslation().getY(); // target X is -Robot Y
+      return robotY;
+    } catch (Exception ex) {
+      return 0;
+    }
   }
 
   double getRobotRot() {
     Pose2d pose = swerve.getSwerveDrive().getPose();
+    if (pose == null) {
+      return 0;
+    }
     double robotRz = pose.getRotation().getDegrees() - targetZ;
     return robotRz;
   }
