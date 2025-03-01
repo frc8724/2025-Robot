@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "from start left to north left"
+            "pathName": "from start right to north right"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -31,19 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "from north left to bump"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "from bump to bump left"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "from bump right to hp"
+            "pathName": "north right l1 to right HP"
           }
         }
       ]
