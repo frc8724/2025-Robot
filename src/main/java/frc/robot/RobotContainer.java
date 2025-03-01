@@ -181,8 +181,6 @@ public class RobotContainer {
         configureNamedCommands();
 
         m_auto.addAuto(new WaitCommand(5));
-        m_auto.addAuto(new AutoDriveOut());
-        m_auto.addAuto("New Auto", new PathPlannerAuto("New Auto"));
         m_auto.addAuto("drive", new PathPlannerAuto("drive"));
         m_auto.addAuto("start left l1 l1", new PathPlannerAuto("start left l1 l1"));
         m_auto.addAuto("start left l1", new PathPlannerAuto("start left l1"));
@@ -257,41 +255,11 @@ public class RobotContainer {
         // drivebase.driveToPose(
         // new Pose2d(new Translation2d(4, 4),
         // Rotation2d.fromDegrees(0))));
-        // m_driverStick.Button(1).onTrue(endEffector.setSpeedCmd(.5));
-        // m_driverStick.Button(1).onFalse(endEffector.setSpeedCmd(0));
-
-        // m_driverStick.Button(2).onTrue(endEffector.setSpeedCmd(-.3));
-        // m_driverStick.Button(2).onFalse(endEffector.setSpeedCmd(0));
-
-        // m_driverStick.Button(3).onTrue(wrist.setPositionCmd(512));
-        // m_driverStick.Button(4).onTrue(wrist.setPositionCmd(0));
-        // m_driverStick.Button(3).onTrue(arm.setElbowPositionCmd(4011));
-        // m_driverStick.Button(4).onTrue(arm.setElbowPositionCmd((4011 + 512) % 4096));
-        // m_driverStick.Button(3).onTrue(arm.setShoulderPositionCmd(4030));
-        // m_driverStick.Button(4).onTrue(arm.setShoulderPositionCmd((4030 + 256) %
-        // 4096));
-
-        // m_driverStick.Button(3).onTrue(
-        // new SequentialCommandGroup(
-        // wrist.setPositionCmd(225), // wrist
-        // arm.setElbowPositionCmd(2775), // elbow
-        // arm.setShoulderPositionCmd(130) // shoulder
-        // ));
-        // m_driverStick.Button(4).onTrue(
-        // new SequentialCommandGroup(
-        // wrist.setPositionCmd(350), // wrist
-        // arm.setElbowPositionCmd(470), // elbow
-        // arm.setShoulderPositionCmd(3836) // shoulder
-        // ));
-
-        // m_driverStick.Button(5).onTrue(wrist.zeroCmd());
 
         m_driverStick.Button(11).onTrue(arm.setShoulderSpeedCmd(-.2));
         m_driverStick.Button(11).onFalse(arm.setShoulderSpeedCmd(0));
         m_driverStick.Button(12).onTrue(arm.setShoulderSpeedCmd(.2));
         m_driverStick.Button(12).onFalse(arm.setShoulderSpeedCmd(0));
-        // m_driverStick.Button(11).onTrue(arm.setShoulderPositionCmd(-278));
-        // m_driverStick.Button(12).onTrue(arm.setShoulderPositionCmd(0));
 
         m_driverStick.Button(9).onTrue(arm.setElbowSpeedCmd(-.2));
         m_driverStick.Button(9).onFalse(arm.setElbowSpeedCmd(0));
@@ -304,20 +272,7 @@ public class RobotContainer {
         m_driverStick.Button(8).onFalse(wrist.setSpeedCmd(0));
 
         m_driverStick.Button(6).onTrue(drivebase.zerCommand());
-        // m_driverStick.Button(5).onTrue(arm.shoulderZeroCmd());
 
-        // m_driverStick.Button(3).onTrue(
-        // new SequentialCommandGroup(
-        // drivebase.driveToPose(
-        // new Pose2d(new Translation2d(1, 0),
-        // Rotation2d.fromDegrees(0))),
-        // new WaitCommand(0.5)));
-        // m_driverStick.Button(3).onTrue(drivebase.driveToDistanceCommand(1.0, -.5,
-        // -.5));
-        // m_driverStick.Button(4).onTrue(drivebase.driveToDistanceCommand(1.0, .5,
-        // .5));
-        // m_driverStick.Button(3).onTrue(drivebase.driveToTargetCmd(0, 0, 10));
-        // m_driverStick.Button(2).onTrue(drivebase.driveToDistanceCommand(0, 1));
         m_driverStick.Button(3).whileTrue(
                 new SequentialCommandGroup(
                         new AlignToTargetZ(m_limelight, drivebase, .75, 0),
@@ -335,19 +290,10 @@ public class RobotContainer {
         ChassisSpeeds slowLeft = new ChassisSpeeds(0, 0.3, 0);
         ChassisSpeeds slowRight = new ChassisSpeeds(0, -0.3, 0);
 
-        // m_driverStick.Button(1).whileTrue(drivebase.driveCmd(slowFwd));
         m_driverStick.PovButton(JoystickPOVButton.NORTH).whileTrue(drivebase.driveCmd(slowFwd));
         m_driverStick.PovButton(JoystickPOVButton.SOUTH).whileTrue(drivebase.driveCmd(slowBack));
         m_driverStick.PovButton(JoystickPOVButton.WEST).whileTrue(drivebase.driveCmd(slowLeft));
         m_driverStick.PovButton(JoystickPOVButton.EAST).whileTrue(drivebase.driveCmd(slowRight));
-
-        // m_driverStick.Button(4).onTrue(new AlignToTargetZ(m_limelight, drivebase, 1,
-        // 0));
-
-        // m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
-        // 0));
-        // m_driverStick.Button(1).onTrue(new AlignToTarget2(drivebase, m_limelight, 1,
-        // 0));
 
         // swerve.getPose();
         // Pose2d p = // new Pose2d(robotX, robotY, Rotation2d.fromDegrees(robotRz));
@@ -362,17 +308,12 @@ public class RobotContainer {
         // Capture Algae - dpad-left
         m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(-549,
                 -1357, -85));
-        // m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(endEffector.setSpeedCmd(0.4));
-        // m_operatorPad.PovButton(JoystickPOVButton.WEST).onFalse(endEffector.setSpeedCmd(0.0));
         // Hold Algae - dpad right
         m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(ArmPositionCmd(-540,
                 -1322, -52));
-        // m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(endEffector.setSpeedCmd(0.4));
-        // m_operatorPad.PovButton(JoystickPOVButton.EAST).onFalse(endEffector.setSpeedCmd(0.0));
         // Score Algae - dpad up
         m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(ArmPositionCmd(-444, -1200, 39));
         m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(endEffector.setSpeedCmd(0.4));
-        // m_operatorPad.PovButton(JoystickPOVButton.NORTH).onFalse(endEffector.setSpeedCmd(0.0));
 
         // Score L1 - Green
         m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(-531, 1380, -278));
@@ -463,7 +404,6 @@ public class RobotContainer {
         // April Tag = Green
         new Trigger(endEffector::hasCoral).whileTrue(lights.hasCoral());
         new Trigger(m_limelight::hasSingleAprilTag).whileTrue(lights.hasAprilTag());
-
     }
 
     private Command allStopCmd() {

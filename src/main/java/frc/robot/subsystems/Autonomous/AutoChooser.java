@@ -4,43 +4,40 @@
 
 package frc.robot.subsystems.Autonomous;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.commands.PathfindingCommand;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class AutoChooser extends SubsystemBase {
-  /** Creates a new AutoChooser. */
-  public AutoChooser() {
-    SmartDashboard.putData("Auto Mode", autoChooser);
-  }
+    public AutoChooser() {
+        SmartDashboard.putData("Auto Mode", autoChooser);
+        SmartDashboard.putNumber("Auto Wait", 0);
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 
-  SendableChooser<Command> autoChooser = new SendableChooser<>();
+    SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-  public void addAuto(Command cmd) {
-    String name = cmd.getClass().getSimpleName();
+    public void addAuto(Command cmd) {
+        String name = cmd.getClass().getSimpleName();
 
-    addAuto(name, cmd);
-  }
+        addAuto(name, cmd);
+    }
 
-  public void addAuto(String name, Command cmd) {
-    autoChooser.addOption(name, cmd);
-  }
+    public void addAuto(String name, Command cmd) {
+        autoChooser.addOption(name, cmd);
+    }
 
-  public Command getAutoCommand() {
-    return autoChooser.getSelected();
-
-  }
-
-  public static Command AutoDriveOut(AutoChooser mAuto) {
-    return null;
-  }
+    public Command getAutoCommand() {
+        // run the auto command prefixed by a wait command
+        return new SequentialCommandGroup(
+                new WaitCommand(SmartDashboard.getNumber("Auto Wait", 0)),
+                autoChooser.getSelected());
+    }
 }
