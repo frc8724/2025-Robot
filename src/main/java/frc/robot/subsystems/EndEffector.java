@@ -28,6 +28,10 @@ public class EndEffector extends SubsystemBase {
     wrist = w;
   }
 
+  public boolean hasCoral() {
+    return limitSwitch.get();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

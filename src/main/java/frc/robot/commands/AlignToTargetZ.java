@@ -79,8 +79,8 @@ public class AlignToTargetZ extends Command {
     double driveRot = rotPid.calculate(robotRz);
 
     // limit driveRot to [-.5, .5]
-    driveRot = Math.min(0.6, driveRot);
-    driveRot = Math.max(-0.6, driveRot);
+    driveRot = Math.min(1.1, driveRot);
+    driveRot = Math.max(-1.1, driveRot);
 
     SmartDashboard.putNumber("Align To Target rotZ", driveRot);
 

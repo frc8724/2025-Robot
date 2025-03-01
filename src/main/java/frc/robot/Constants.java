@@ -109,9 +109,7 @@ public final class Constants {
     public static final double kPModuleDriveController = 1;
   }
 
-  public final class Solenoid {
-    public static final int INTAKE = 0;
-    public static final int CLIMBER = 1;
-    public static final int CAMERA_LIGHTS = 2;
+  public final class PWM {
+    public static final int LIGHTS_PORT = 0;
   }
 }

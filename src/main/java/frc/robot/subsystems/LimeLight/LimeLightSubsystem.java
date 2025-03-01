@@ -55,8 +55,12 @@ public class LimeLightSubsystem extends SubsystemBase {
         }
     }
 
-    public Double getTv() {
-        return tv.getDouble(0.0);
+    public boolean hasSingleAprilTag() {
+        return getTv() == 1;
+    }
+
+    public int getTv() {
+        return (int) tv.getDouble(0.0);
     }
 
     public Double getTx() {

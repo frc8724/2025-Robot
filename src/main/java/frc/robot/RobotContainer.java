@@ -19,6 +19,7 @@ import frc.robot.controls.MayhemExtreme3dPro;
 import frc.robot.controls.MayhemLogitechAttack3;
 import frc.robot.controls.MayhemOperatorPad;
 import frc.robot.subsystems.EndEffector;
+import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Arm.Arm;
 import frc.robot.subsystems.Autonomous.*;
@@ -81,6 +82,7 @@ public class RobotContainer {
     private final Wrist wrist = new Wrist();
     private final EndEffector endEffector = new EndEffector(wrist);
     private final Arm arm = new Arm();
+    private final LEDLights lights = new LEDLights();
 
     /**
      * Converts driver input into a field-relative ChassisSpeeds that is controlled
@@ -323,10 +325,10 @@ public class RobotContainer {
                         new AlignToTargetZ(m_limelight, drivebase, 751, 0)));
         m_driverStick.Button(4).whileTrue(
                 new SequentialCommandGroup(
-                        new AlignToTargetZ(m_limelight, drivebase, .75, -.39),
-                        new AlignToTargetXY(m_limelight, drivebase, .75, -.39),
-                        new AlignToTargetZ(m_limelight, drivebase, .75, -.39),
-                        new AlignToTargetXY(m_limelight, drivebase, .75, -0.39)));
+                        new AlignToTargetZ(m_limelight, drivebase, .9, -.39),
+                        new AlignToTargetXY(m_limelight, drivebase, .9, -.39),
+                        new AlignToTargetZ(m_limelight, drivebase, .9, -.39),
+                        new AlignToTargetXY(m_limelight, drivebase, .9, -0.39)));
 
         ChassisSpeeds slowFwd = new ChassisSpeeds(.3, 0, 0);
         ChassisSpeeds slowBack = new ChassisSpeeds(-.3, 0, 0);
@@ -454,6 +456,13 @@ public class RobotContainer {
         // All Stop
         m_operatorPad.AxisButton(MayhemDriverPad.GAMEPAD_F310_LEFT_TRIGGER, Direction.POSITIVE_ONLY)
                 .onTrue(allStopCmd());
+
+        // LED Lights
+        // default blue / white
+        // Coral = red
+        // April Tag = Green
+        new Trigger(endEffector::hasCoral).whileTrue(lights.hasCoral());
+        new Trigger(m_limelight::hasSingleAprilTag).whileTrue(lights.hasAprilTag());
 
     }
 
