@@ -21,188 +21,188 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class Arm extends SubsystemBase {
-  TalonFX shoulderLeft = new TalonFX(Constants.DriveConstants.kShoulderLeftMotor);
-  TalonFX shoulderRight = new TalonFX(Constants.DriveConstants.kShoulderRightMotor);
-  TalonFX elbow = new TalonFX(Constants.DriveConstants.kElbowMotor);
+    TalonFX shoulderLeft = new TalonFX(Constants.DriveConstants.kShoulderLeftMotor);
+    TalonFX shoulderRight = new TalonFX(Constants.DriveConstants.kShoulderRightMotor);
+    TalonFX elbow = new TalonFX(Constants.DriveConstants.kElbowMotor);
 
-  Encoder shoulderEncoder = new Encoder(3, 4);
-  ThirftyAbsMagneticEncoder elbowEncoder = new ThirftyAbsMagneticEncoder(4, -84);
+    Encoder shoulderEncoder = new Encoder(3, 4);
+    ThirftyAbsMagneticEncoder elbowEncoder = new ThirftyAbsMagneticEncoder(4, -84);
 
-  DutyCycleOut output = new DutyCycleOut(0);
+    DutyCycleOut output = new DutyCycleOut(0);
 
-  PIDController elbowPid = new PIDController(0.0009, 0, 0);
-  PIDController shoulderPid = new PIDController(0.002, 0, 0);
+    PIDController elbowPid = new PIDController(0.0009, 0, 0);
+    PIDController shoulderPid = new PIDController(0.002, 0, 0);
 
-  boolean elbowPosMode = false;
-  boolean shoulderPosMode = false;
+    boolean elbowPosMode = false;
+    boolean shoulderPosMode = false;
 
-  double elbowSetpoint;
-  double shoulderSetpoint;
+    double elbowSetpoint;
+    double shoulderSetpoint;
 
-  final double ElbowEncoderOffset = 0;
-  final double ShoulderEncoderOffset = 0;
+    final double ElbowEncoderOffset = 0;
+    final double ShoulderEncoderOffset = 0;
 
-  final double ElbowEncoderTicksPerRevolution = 4096;
-  final double ElbowEncoderTickeAtVertical = 4011;
-  final double ShoulderEncoderTickeAtVertical = 4030;
+    final double ElbowEncoderTicksPerRevolution = 4096;
+    final double ElbowEncoderTickeAtVertical = 4011;
+    final double ShoulderEncoderTickeAtVertical = 4030;
 
-  /** Creates a new Arm. */
-  public Arm() {
-    elbowPid.setTolerance(30, 100);
-    shoulderPid.setTolerance(30, 100);
+    /** Creates a new Arm. */
+    public Arm() {
+        elbowPid.setTolerance(30, 100);
+        shoulderPid.setTolerance(30, 100);
 
-    shoulderLeft.setControl(new Follower(Constants.DriveConstants.kShoulderRightMotor, true));
+        shoulderLeft.setControl(new Follower(Constants.DriveConstants.kShoulderRightMotor, true));
 
-    var shoulderConfig = new TalonFXConfiguration();
-    shoulderConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    shoulderLeft.getConfigurator().apply(shoulderConfig);
-    shoulderRight.getConfigurator().apply(shoulderConfig);
+        var shoulderConfig = new TalonFXConfiguration();
+        shoulderConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        shoulderLeft.getConfigurator().apply(shoulderConfig);
+        shoulderRight.getConfigurator().apply(shoulderConfig);
 
-    var elbowConfig = new TalonFXConfiguration();
-    elbowConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    elbowConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    elbow.getConfigurator().apply(elbowConfig);
-    shoulderEncoder.setReverseDirection(true);
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    double elbowPower = elbowPid.calculate(elbowEncoder.getValue(), elbowSetpoint);
-    double shoulderPower = shoulderPid.calculate(shoulderEncoder.get(), shoulderSetpoint);
-
-    elbowPower = MathUtil.clamp(elbowPower, -.5, .5);
-    shoulderPower = MathUtil.clamp(shoulderPower, -.2, .2);
-
-    if (elbowPosMode) {
-      elbow.setControl(output.withOutput(elbowPower));
+        var elbowConfig = new TalonFXConfiguration();
+        elbowConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        elbowConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        elbow.getConfigurator().apply(elbowConfig);
+        shoulderEncoder.setReverseDirection(true);
     }
 
-    if (shoulderPosMode) {
-      shoulderRight.setControl(output.withOutput(shoulderPower));
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        double elbowPower = elbowPid.calculate(elbowEncoder.getValue(), elbowSetpoint);
+        double shoulderPower = shoulderPid.calculate(shoulderEncoder.get(), shoulderSetpoint);
+
+        elbowPower = MathUtil.clamp(elbowPower, -.5, .5);
+        shoulderPower = MathUtil.clamp(shoulderPower, -.2, .2);
+
+        if (elbowPosMode) {
+            elbow.setControl(output.withOutput(elbowPower));
+        }
+
+        if (shoulderPosMode) {
+            shoulderRight.setControl(output.withOutput(shoulderPower));
+        }
+
+        SmartDashboard.putNumber("Shoulder Encoder", shoulderEncoder.get());
+        SmartDashboard.putNumber("Elbow Encoder", elbowEncoder.getValue());
+        SmartDashboard.putNumber("Elbow Position Power", elbowPower);
+        SmartDashboard.putNumber("Elbow Position Setpoint", elbowSetpoint);
+        SmartDashboard.putNumber("Shoulder Position Power", shoulderPower);
+        SmartDashboard.putNumber("Shoulder Position Setpoint", shoulderSetpoint);
     }
 
-    SmartDashboard.putNumber("Shoulder Encoder", shoulderEncoder.get());
-    SmartDashboard.putNumber("Elbow Encoder", elbowEncoder.getValue());
-    SmartDashboard.putNumber("Elbow Position Power", elbowPower);
-    SmartDashboard.putNumber("Elbow Position Setpoint", elbowSetpoint);
-    SmartDashboard.putNumber("Shoulder Position Power", shoulderPower);
-    SmartDashboard.putNumber("Shoulder Position Setpoint", shoulderSetpoint);
-  }
-
-  public void setShoulderSpeed(double d) {
-    shoulderPosMode = false;
-    shoulderRight.setControl(output.withOutput(d));
-  }
-
-  public Command setShoulderSpeedCmd(double d) {
-    return runOnce(() -> {
-      setShoulderSpeed(d);
-    });
-  }
-
-  public void setElbowSpeed(double d) {
-    elbowPosMode = false;
-    elbow.setControl(output.withOutput(d));
-  }
-
-  public Command setElbowSpeedCmd(double d) {
-    return runOnce(() -> {
-      setElbowSpeed(d);
-    });
-  }
-
-  public void setElbowPosition(double d) {
-    elbowPosMode = true;
-    elbowSetpoint = d;
-  }
-
-  public Command setShoulderPositionOffset(double d) {
-    return runOnce(() -> {
-      setShoulderPosition(shoulderSetpoint + d);
-    });
-  }
-
-  public Command setElbowPositionOffset(double d) {
-    return runOnce(() -> {
-      setElbowPosition(elbowSetpoint + d);
-    });
-  }
-
-  public Command setElbowPositionCmd(double d) {
-    return runOnce(() -> {
-      setElbowPosition(d);
-    });
-  }
-
-  public Command setElbowAbsolutePositionCmd(double d) {
-    return runOnce(() -> {
-      setElbowPosition(d - shoulderEncoder.get());
-    });
-  }
-
-  public void setShoulderPosition(double d) {
-    shoulderPosMode = true;
-
-    if (d > 0) {
-      d = 0;
+    public void setShoulderSpeed(double d) {
+        shoulderPosMode = false;
+        shoulderRight.setControl(output.withOutput(d));
     }
-    if (d < -300) {
-      d = -300;
+
+    public Command setShoulderSpeedCmd(double d) {
+        return runOnce(() -> {
+            setShoulderSpeed(d);
+        });
     }
-    shoulderSetpoint = d;
-  }
 
-  public Command setShoulderPositionCmd(double d) {
-    return runOnce(() -> {
-      setShoulderPosition(d);
-    });
-  }
+    public void setElbowSpeed(double d) {
+        elbowPosMode = false;
+        elbow.setControl(output.withOutput(d));
+    }
 
-  public Command setPositionCmd(double elbowPos, double shoulderPos) {
-    return runOnce(() -> {
-      setShoulderPosition(shoulderPos);
-      setElbowPosition(elbowPos);
-    });
-  }
+    public Command setElbowSpeedCmd(double d) {
+        return runOnce(() -> {
+            setElbowSpeed(d);
+        });
+    }
 
-  double convertRadianToEncoder(double x, double offset) {
-    return x / (2 * Math.PI) * 4095 + offset;
-  }
+    public void setElbowPosition(double d) {
+        elbowPosMode = true;
+        elbowSetpoint = d;
+    }
 
-  public boolean elbowIsAtSetpoint() {
-    return Math.abs(elbowSetpoint - elbowEncoder.getValue()) < 50;
-  }
+    public Command setShoulderPositionOffset(double d) {
+        return runOnce(() -> {
+            setShoulderPosition(shoulderSetpoint + d);
+        });
+    }
 
-  public boolean shoulderIsAtSetpoint() {
-    return Math.abs(elbowSetpoint - elbowEncoder.getValue()) < 20;
-  }
+    public Command setElbowPositionOffset(double d) {
+        return runOnce(() -> {
+            setElbowPosition(elbowSetpoint + d);
+        });
+    }
 
-  public Command shoulderZeroCmd() {
-    return runOnce(() -> {
-      shoulderEncoder.reset();
-    });
-  }
+    public Command setElbowPositionCmd(double d) {
+        return runOnce(() -> {
+            setElbowPosition(d);
+        });
+    }
 
-  public double getShoulderSetpoint() {
-    return shoulderSetpoint;
-  }
+    public Command setElbowAbsolutePositionCmd(double d) {
+        return runOnce(() -> {
+            setElbowPosition(d - shoulderEncoder.get());
+        });
+    }
 
-  public Command isAtPositionCmd() {
-    return new ArmIsAtPosition(this);
-  }
+    public void setShoulderPosition(double d) {
+        shoulderPosMode = true;
 
-  // public Command setArmPositionCmd(double x, double y) {
-  // var angles = InverseKinematics.getPreferredArmAngles(x, y);
+        if (d > 0) {
+            d = 0;
+        }
+        if (d < -350) {
+            d = -350;
+        }
+        shoulderSetpoint = d;
+    }
 
-  // double elbowEncoderCounts = convertRadianToEncoder(angles.elbowAngleRads,
-  // ElbowEncoderOffset);
-  // double shoulderEncoderCounts =
-  // convertRadianToEncoder(angles.shoulderAngleRads, ShoulderEncoderOffset);
+    public Command setShoulderPositionCmd(double d) {
+        return runOnce(() -> {
+            setShoulderPosition(d);
+        });
+    }
 
-  // return runOnce(() -> {
-  // setShoulderPosition(shoulderEncoderCounts);
-  // setElbowPosition(elbowEncoderCounts);
-  // });
-  // }
+    public Command setPositionCmd(double elbowPos, double shoulderPos) {
+        return runOnce(() -> {
+            setShoulderPosition(shoulderPos);
+            setElbowPosition(elbowPos);
+        });
+    }
+
+    double convertRadianToEncoder(double x, double offset) {
+        return x / (2 * Math.PI) * 4095 + offset;
+    }
+
+    public boolean elbowIsAtSetpoint() {
+        return Math.abs(elbowSetpoint - elbowEncoder.getValue()) < 50;
+    }
+
+    public boolean shoulderIsAtSetpoint() {
+        return Math.abs(elbowSetpoint - elbowEncoder.getValue()) < 20;
+    }
+
+    public Command shoulderZeroCmd() {
+        return runOnce(() -> {
+            shoulderEncoder.reset();
+        });
+    }
+
+    public double getShoulderSetpoint() {
+        return shoulderSetpoint;
+    }
+
+    public Command isAtPositionCmd() {
+        return new ArmIsAtPosition(this);
+    }
+
+    // public Command setArmPositionCmd(double x, double y) {
+    // var angles = InverseKinematics.getPreferredArmAngles(x, y);
+
+    // double elbowEncoderCounts = convertRadianToEncoder(angles.elbowAngleRads,
+    // ElbowEncoderOffset);
+    // double shoulderEncoderCounts =
+    // convertRadianToEncoder(angles.shoulderAngleRads, ShoulderEncoderOffset);
+
+    // return runOnce(() -> {
+    // setShoulderPosition(shoulderEncoderCounts);
+    // setElbowPosition(elbowEncoderCounts);
+    // });
+    // }
 }

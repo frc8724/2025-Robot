@@ -45,6 +45,12 @@
           "data": {
             "pathName": "north left to hp"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "hp to teleop"
+          }
         }
       ]
     }
