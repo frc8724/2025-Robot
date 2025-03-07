@@ -318,11 +318,11 @@ public class RobotContainer {
         // Score L1 - Green
         m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(-531, 1380, -278));
         // Gather from HP - Blue
-        m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(-680, 1155, -342));
+        m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(-608, 1155, -342));
         // Score L2 - Red
         m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_B_BUTTON).onTrue(ArmPositionCmd(-188, 937, -286));
         // Score L3 - Yellow
-        m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-70, 265, -126));
+        m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-20, 165, -126));
 
         // Intake - Right Trigger Top
         m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onTrue(endEffector.setSpeedCmd(.3));
@@ -419,7 +419,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
         NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
         NamedCommands.registerCommand("Algae High", ArmPositionAutoCmd(-750, -929, -13));
-        NamedCommands.registerCommand("Algae High Remove", ArmPositionAutoCmd(-485, -900, -13));
+        NamedCommands.registerCommand("Algae High Remove", ArmPositionAutoCmd(-485, -900, -13).withTimeout(2.0o));
 
         NamedCommands.registerCommand("IntakeStop", endEffector.setSpeedCmd(0.0));
         NamedCommands.registerCommand("AutoHP", ArmPositionAutoCmd(-480, -1200, 0));

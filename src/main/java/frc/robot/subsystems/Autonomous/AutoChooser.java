@@ -36,8 +36,9 @@ public class AutoChooser extends SubsystemBase {
 
     public Command getAutoCommand() {
         // run the auto command prefixed by a wait command
-        return new SequentialCommandGroup(
-                new WaitCommand(SmartDashboard.getNumber("Auto Wait", 0)),
-                autoChooser.getSelected());
+        // new SequentialCommandGroup(
+        // new WaitCommand(SmartDashboard.getNumber("Auto Wait", 0)),
+        // autoChooser.getSelected());
+        return autoChooser.getSelected();
     }
 }
