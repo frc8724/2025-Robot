@@ -419,7 +419,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
         NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
         NamedCommands.registerCommand("Algae High", ArmPositionAutoCmd(-750, -929, -13));
-        NamedCommands.registerCommand("Algae High Remove", ArmPositionAutoCmd(-485, -900, -13).withTimeout(2.0o));
+        NamedCommands.registerCommand("Algae High Remove", ArmPositionAutoCmd(-485, -900, -13).withTimeout(2.0));
 
         NamedCommands.registerCommand("IntakeStop", endEffector.setSpeedCmd(0.0));
         NamedCommands.registerCommand("AutoHP", ArmPositionAutoCmd(-480, -1200, 0));
