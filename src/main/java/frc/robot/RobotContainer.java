@@ -306,11 +306,9 @@ public class RobotContainer {
         m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1764, 0));
         m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(endEffector.setSpeedCmd(0.0));
         // Capture Algae - dpad-left
-        m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(-549,
-                -1357, -85));
+        m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(-549, -1357, -55));
         // Hold Algae - dpad right
-        m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(ArmPositionCmd(-540,
-                -1322, -52));
+        m_operatorPad.PovButton(JoystickPOVButton.EAST).onTrue(ArmPositionCmd(-540, -1322, -32));
         // Score Algae - dpad up
         m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(ArmPositionCmd(-444, -1200, 39));
         m_operatorPad.PovButton(JoystickPOVButton.NORTH).onTrue(endEffector.setSpeedCmd(0.4));
@@ -318,11 +316,11 @@ public class RobotContainer {
         // Score L1 - Green
         m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_A_BUTTON).onTrue(ArmPositionCmd(-531, 1380, -278));
         // Gather from HP - Blue
-        m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(-608, 1155, -342));
+        m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_X_BUTTON).onTrue(ArmPositionCmd(-608, 1145, -342));
         // Score L2 - Red
         m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_B_BUTTON).onTrue(ArmPositionCmd(-188, 937, -286));
         // Score L3 - Yellow
-        m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-20, 165, -126));
+        m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_Y_BUTTON).onTrue(ArmPositionCmd(-70, 240, -126));
 
         // Intake - Right Trigger Top
         m_operatorPad.Button(MayhemDriverPad.GAMEPAD_F310_RIGHT_BUTTON).onTrue(endEffector.setSpeedCmd(.3));
