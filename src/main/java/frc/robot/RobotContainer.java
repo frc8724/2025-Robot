@@ -303,7 +303,7 @@ public class RobotContainer {
                 // Rotation2d.fromDegrees(robotRz)));
 
                 // Stow - dpad down
-                m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1734, 0));
+                m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(ArmPositionCmd(0, -1700, 0));
                 m_operatorPad.PovButton(JoystickPOVButton.SOUTH).onTrue(endEffector.setSpeedCmd(0.0));
                 // Capture Algae - dpad-left
                 m_operatorPad.PovButton(JoystickPOVButton.WEST).onTrue(ArmPositionCmd(-549, -1357, -55));
@@ -337,7 +337,8 @@ public class RobotContainer {
                                 .onFalse(
                                                 new SequentialCommandGroup(
                                                                 endEffector.setSpeedCmd(-.5),
-                                                                ArmPositionCmd(-668, 1288, -270),
+                                                                arm.setElbowPositionCmd(1288),
+                                                                arm.setShoulderPositionCmd(-270),
                                                                 new WaitCommand(1.0),
                                                                 endEffector.setSpeedCmd(0)));
 
@@ -348,8 +349,10 @@ public class RobotContainer {
                                 .onFalse(
                                                 new SequentialCommandGroup(
                                                                 endEffector.setSpeedCmd(-.5),
-                                                                ArmPositionCmd(-399, 760, -177),
+                                                                // ArmPositionCmd(-399, 760, -177),
 
+                                                                arm.setElbowPositionCmd(760),
+                                                                arm.setShoulderPositionCmd(-177),
                                                                 new WaitCommand(1.0),
                                                                 endEffector.setSpeedCmd(0)));
 
@@ -440,10 +443,10 @@ public class RobotContainer {
 
                                         // if starting on front and going to back, go to L3
                                         if (curr && !setp) {
-                                                return ArmPositionDirectCmd(-287, -670, 0);
+                                                return ArmPositionDirectCmd(-200, -670, 0);
                                         }
                                         if (!curr && setp) {
-                                                return ArmPositionDirectCmd(-287, 495, -117);
+                                                return ArmPositionDirectCmd(-200, 495, -117);
                                         }
                                         return new WaitCommand(0.1);
                                 }, Set.of(arm)),
@@ -453,7 +456,7 @@ public class RobotContainer {
         private Command ArmPositionDirectCmd(double wristPos, double elbowPos, double shoulderPos) {
                 return new SequentialCommandGroup(
                                 arm.setPositionCmd(elbowPos, shoulderPos), // elbow
-                                wrist.setPositionCmd(-465),
+                                wrist.setPositionCmd(-215),
                                 arm.isAtPositionCmd(),
                                 wrist.setPositionCmd(wristPos));
         }
@@ -473,7 +476,7 @@ public class RobotContainer {
                                                                 // arm.setPositionCmd(0, 0),
                                                                 arm.setElbowPositionCmd(0),
                                                                 // arm.isAtPositionCmd(),
-                                                                new WaitCommand(1.5),
+                                                                new WaitCommand(1.0),
                                                                 arm.setShoulderPositionCmd(newSetPoint),
                                                                 arm.isAtPositionCmd()))),
                                 () -> {
