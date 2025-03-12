@@ -98,6 +98,9 @@ public class SwerveSubsystem extends SubsystemBase {
       // updates better.
       swerveDrive.stopOdometryThread();
     }
+
+    // swerveDrive.setMotorIdleMode(true);
+
     setupPathPlanner();
   }
 

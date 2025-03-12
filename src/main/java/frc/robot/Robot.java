@@ -38,6 +38,8 @@ public class Robot extends TimedRobot {
         m_robotContainer = new RobotContainer();
         CameraServer.startAutomaticCapture();
         PathfindingCommand.warmupCommand().schedule();
+
+        m_robotContainer.SwerveBrakeMode(true);
     }
 
     /**
@@ -65,6 +67,7 @@ public class Robot extends TimedRobot {
     /** This function is called once each time the robot enters Disabled mode. */
     @Override
     public void disabledInit() {
+        m_robotContainer.SwerveBrakeMode(false);
     }
 
     @Override
@@ -77,6 +80,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        m_robotContainer.SwerveBrakeMode(true);
+
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
@@ -92,6 +97,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        m_robotContainer.SwerveBrakeMode(true);
+
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
@@ -108,6 +115,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+        m_robotContainer.SwerveBrakeMode(true);
+
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
     }
@@ -120,6 +129,8 @@ public class Robot extends TimedRobot {
     /** This function is called once when the robot is first started up. */
     @Override
     public void simulationInit() {
+        m_robotContainer.SwerveBrakeMode(true);
+
     }
 
     /** This function is called periodically whilst in simulation. */
